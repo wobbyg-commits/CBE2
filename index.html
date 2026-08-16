@@ -1,0 +1,2341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Competency Architect · WSU Tech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#14161A; --ink-2:#20242A; --ink-3:#2E343C;
+  --paper:#EDF0EA; --card:#FFFFFF; --card-2:#F7F9F5;
+  --signal:#FFC72C; --signal-dim:#E0A800;
+  --slate:#5A636B; --slate-2:#828C93;
+  --rule:#CDD3C9; --rule-2:#E2E6DE;
+  --K:#1D5B8E; --S:#0F7A69; --A:#99560F; --B:#6E3A78;
+  --bad:#B32B23; --warn:#9A6205; --ok:#186B3F;
+  --d:'Archivo',system-ui,sans-serif;
+  --b:'Public Sans',system-ui,sans-serif;
+  --m:'IBM Plex Mono',ui-monospace,monospace;
+  --sp:clamp(14px,2vw,22px);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--paper); color:var(--ink); font-family:var(--b);
+  font-size:15px; line-height:1.5; -webkit-font-smoothing:antialiased;
+}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:none}
+h1,h2,h3,h4{margin:0;font-family:var(--d);font-weight:700;letter-spacing:-.015em;line-height:1.15}
+a{color:var(--K)}
+
+/* ---------- structural motif: the marker bar ---------- */
+.bar{display:block;height:4px;width:34px;background:var(--signal);border-radius:1px}
+
+/* ---------- chrome ---------- */
+.chrome{background:var(--ink);color:#fff;position:sticky;top:0;z-index:40}
+.chrome-in{max-width:1560px;margin:0 auto;padding:14px var(--sp);display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px;margin-right:auto}
+.brand .mark{width:8px;height:34px;background:var(--signal);border-radius:1px;flex:none}
+.brand h1{font-size:17px;font-weight:800;letter-spacing:-.02em;text-transform:uppercase}
+.brand p{margin:1px 0 0;font-family:var(--m);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:#9AA3AB}
+
+.seg{display:flex;background:var(--ink-3);border-radius:3px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{
+  font-family:var(--d);font-size:12px;font-weight:600;letter-spacing:.02em;
+  padding:7px 13px;border-radius:2px;color:#B7BEC5;white-space:nowrap;
+}
+.seg button:hover{color:#fff}
+.seg button[aria-pressed="true"]{background:var(--signal);color:var(--ink)}
+.seg.sm button{font-size:11px;padding:6px 11px}
+.track-wrap{display:flex;align-items:center;gap:9px}
+.track-wrap[hidden]{display:none}
+[hidden]{display:none!important}
+.track-wrap .lbl{font-family:var(--m);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:#7D868E}
+
+/* ---------- program band ---------- */
+.band{background:var(--ink-2);color:#fff;border-top:1px solid #33393F}
+.band-in{max-width:1560px;margin:0 auto;padding:16px var(--sp) 18px;display:grid;gap:16px 34px;grid-template-columns:minmax(260px,1.4fr) repeat(auto-fit,minmax(190px,1fr))}
+.band h2{font-size:21px;font-weight:700;letter-spacing:-.02em}
+.band .cred{font-family:var(--m);font-size:11px;color:var(--signal);letter-spacing:.06em;margin-top:5px}
+.band .site{font-size:12.5px;color:#9AA3AB;margin-top:3px}
+.meta-h{font-family:var(--m);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#78818A;margin-bottom:6px}
+.meta-l{font-size:12.5px;color:#D3D8DD;line-height:1.55}
+.meta-l span{display:block}
+
+/* ---------- view tabs ---------- */
+.tabs{background:var(--card);border-bottom:1px solid var(--rule);position:sticky;top:0;z-index:30}
+.tabs-in{max-width:1560px;margin:0 auto;padding:0 var(--sp);display:flex;gap:2px;overflow-x:auto}
+.tabs button{
+  font-family:var(--d);font-size:12.5px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;
+  padding:14px 16px;color:var(--slate);border-bottom:3px solid transparent;white-space:nowrap;
+}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--signal)}
+.tabs .count{font-family:var(--m);font-size:10px;margin-left:6px;padding:2px 5px;border-radius:2px;background:var(--paper);color:var(--slate)}
+.tabs .count.flag{background:#FBE3E1;color:var(--bad)}
+
+/* ---------- layout ---------- */
+main{max-width:1560px;margin:0 auto;padding:var(--sp)}
+.build{display:grid;grid-template-columns:302px minmax(0,1fr);gap:var(--sp);align-items:start}
+
+/* ---------- tree ---------- */
+.tree{background:var(--card);border:1px solid var(--rule);border-radius:4px;position:sticky;top:56px;max-height:calc(100vh - 76px);overflow:auto}
+.tree-h{padding:13px 14px 11px;border-bottom:1px solid var(--rule-2);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.tree-h .t{font-family:var(--m);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate)}
+.dom{border-bottom:1px solid var(--rule-2)}
+.dom:last-child{border-bottom:none}
+.dom-btn{width:100%;text-align:left;padding:11px 14px;display:flex;gap:9px;align-items:baseline}
+.dom-btn:hover{background:var(--card-2)}
+.dom-btn.on{background:#FFF8E2;box-shadow:inset 3px 0 0 var(--signal)}
+.dom-btn .id{font-family:var(--m);font-size:10.5px;color:var(--slate-2);flex:none}
+.dom-btn .nm{font-family:var(--d);font-size:13px;font-weight:600;letter-spacing:-.005em}
+.comp-btn{width:100%;text-align:left;padding:8px 14px 8px 32px;display:flex;gap:9px;align-items:baseline;border-top:1px solid #F1F3EF}
+.comp-btn:hover{background:var(--card-2)}
+.comp-btn.on{background:var(--ink);color:#fff}
+.comp-btn.on .id{color:var(--signal)}
+.comp-btn .id{font-family:var(--m);font-size:10.5px;color:var(--slate-2);flex:none}
+.comp-btn .nm{font-size:12.5px;line-height:1.35}
+.comp-btn .dot{width:6px;height:6px;border-radius:50%;background:var(--bad);flex:none;margin-left:auto;align-self:center}
+.comp-add{
+  width:100%;text-align:left;padding:8px 14px 9px 32px;border-top:1px solid #F1F3EF;
+  font-family:var(--m);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--slate-2);
+}
+.comp-add:hover{background:#FFF8E2;color:var(--ink);box-shadow:inset 3px 0 0 var(--signal)}
+.comp-btn .nm.untitled{color:var(--slate-2);font-style:italic}
+.tree-add{width:100%;padding:11px 14px;text-align:left;font-family:var(--m);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--slate);border-top:1px solid var(--rule-2)}
+.tree-add:hover{background:var(--card-2);color:var(--ink)}
+
+/* ---------- panel / cards ---------- */
+.panel{display:flex;flex-direction:column;gap:var(--sp);min-width:0}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:4px}
+.card-h{padding:15px 18px 13px;border-bottom:1px solid var(--rule-2);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.card-h h3{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.card-h .sub{font-size:12px;color:var(--slate);margin-left:auto}
+.card-b{padding:18px}
+.cben-tag{
+  font-family:var(--m);font-size:9.5px;letter-spacing:.08em;padding:3px 6px;border-radius:2px;
+  background:var(--paper);color:var(--slate);border:1px solid var(--rule-2);cursor:help;
+}
+
+/* ---------- forms ---------- */
+label.f{display:block}
+label.f>.lh{font-family:var(--m);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--slate);margin-bottom:5px;display:block}
+input[type=text],input[type=number],textarea,select{
+  width:100%;background:var(--card-2);border:1px solid var(--rule-2);border-radius:3px;
+  padding:8px 10px;font-size:13.5px;line-height:1.45;transition:border-color .12s,background .12s;
+}
+input[type=text]:focus,textarea:focus,select:focus,input[type=number]:focus{
+  outline:none;border-color:var(--ink);background:#fff;box-shadow:0 0 0 3px rgba(255,199,44,.35)
+}
+textarea{resize:vertical;min-height:62px;font-family:var(--b)}
+select{cursor:pointer}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}
+.stmt-grid{display:grid;grid-template-columns:120px 1fr;gap:12px 14px;align-items:start}
+@media(max-width:640px){.stmt-grid{grid-template-columns:1fr}}
+.readout{
+  background:var(--ink);color:#fff;border-radius:3px;padding:15px 17px;margin-top:16px;
+  font-size:15px;line-height:1.6;
+}
+.readout .v{color:var(--signal);font-weight:600}
+.readout .c{color:#A9D8CE}
+.readout .cr{color:#FFD9A8}
+.readout .rh{font-family:var(--m);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#78818A;display:block;margin-bottom:8px}
+
+/* ---------- record bar ---------- */
+.rec{
+  display:grid;grid-template-columns:150px minmax(180px,1fr) auto;gap:14px;align-items:end;
+  padding:14px 18px;background:var(--card-2);border-bottom:1px solid var(--rule-2);
+}
+@media(max-width:760px){.rec{grid-template-columns:1fr}}
+.rec #sId{font-family:var(--m);font-size:12.5px;font-weight:500}
+.rec input.bad{border-color:var(--bad);background:#FEF4F3;box-shadow:0 0 0 3px rgba(179,43,35,.14)}
+.rec label.f{position:relative}
+.ferr{
+  position:absolute;top:calc(100% + 5px);left:0;z-index:6;width:max(100%,200px);
+  font-size:11.5px;line-height:1.4;color:var(--bad);
+  background:#FEF4F3;border:1px solid #E5BEBA;border-radius:3px;padding:6px 8px;
+}
+.rec-acts{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-bottom:1px}
+.rec-acts .lh{font-family:var(--m);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--slate)}
+.nudge{display:flex;border:1px solid var(--rule);border-radius:3px;overflow:hidden;background:#fff}
+.nudge button{width:32px;height:34px;font-size:9px;color:var(--slate);display:grid;place-items:center}
+.nudge button+button{border-left:1px solid var(--rule)}
+.nudge button:hover:not(:disabled){background:var(--signal);color:var(--ink)}
+.nudge button:disabled{color:var(--rule);cursor:not-allowed}
+.rec-acts .add-btn{padding:9px 13px}
+
+/* ---------- KSAB ---------- */
+.ks-row{display:grid;grid-template-columns:auto 74px 1fr auto;gap:11px;align-items:start;padding:9px 0;border-top:1px solid var(--rule-2)}
+.ks-row:first-of-type{border-top:none}
+.ks-id{font-family:var(--m);font-size:11px;color:var(--slate-2);padding-top:9px;width:34px}
+.ks-row select{padding:8px 6px;font-family:var(--m);font-size:11px;font-weight:600}
+.ks-K{color:var(--K)} .ks-S{color:var(--S)} .ks-A{color:var(--A)} .ks-B{color:var(--B)}
+.chip{
+  display:inline-flex;align-items:center;gap:6px;font-family:var(--m);font-size:10.5px;font-weight:500;
+  padding:4px 8px;border-radius:2px;border:1px solid;background:#fff;
+}
+.chip.K{color:var(--K);border-color:#B9CFE2}.chip.K.fill{background:#EAF2F8}
+.chip.S{color:var(--S);border-color:#AED5CE}.chip.S.fill{background:#E7F4F1}
+.chip.A{color:var(--A);border-color:#E0C79E}.chip.A.fill{background:#FAF1E3}
+.chip.B{color:var(--B);border-color:#CFB7D4}.chip.B.fill{background:#F5EDF6}
+.chip.off{opacity:.42;filter:grayscale(.6)}
+.chip-btn{cursor:pointer}
+.chip-btn:hover{box-shadow:0 0 0 2px rgba(20,22,26,.12)}
+.balance{display:flex;gap:3px;height:7px;border-radius:2px;overflow:hidden;background:var(--rule-2);margin-top:2px}
+.balance i{display:block}
+.icon-btn{width:28px;height:28px;border-radius:3px;color:var(--slate-2);display:grid;place-items:center;font-size:16px;line-height:1;margin-top:5px}
+.icon-btn:hover{background:#FBE3E1;color:var(--bad)}
+.add-btn{
+  font-family:var(--m);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  border:1px dashed var(--rule);border-radius:3px;padding:8px 12px;color:var(--slate);
+}
+.add-btn:hover{border-color:var(--ink);color:var(--ink);background:var(--card-2)}
+.row-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+
+/* ---------- rubric & activities ---------- */
+.list-row{display:grid;grid-template-columns:24px 1fr auto;gap:10px;align-items:center;padding:6px 0}
+.list-row .n{font-family:var(--m);font-size:10.5px;color:var(--slate-2)}
+.act{border:1px solid var(--rule-2);border-radius:3px;padding:13px;margin-bottom:11px;background:var(--card-2)}
+.act-top{display:grid;grid-template-columns:1fr 170px 92px auto;gap:11px;align-items:center}
+@media(max-width:760px){.act-top{grid-template-columns:1fr}}
+.targets{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px;align-items:center}
+.targets .lh{font-family:var(--m);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--slate);margin-right:3px}
+
+/* ---------- trace ---------- */
+.trace-wrap{position:relative}
+.trace-svg{position:absolute;inset:0;pointer-events:none;z-index:1;overflow:visible}
+.trace-wrap{isolation:isolate}
+.tblock{background:var(--card);border:1px solid var(--rule);border-radius:4px;margin-bottom:var(--sp)}
+.tblock-h{padding:14px 18px;border-bottom:1px solid var(--rule-2);display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.tblock-h .id{font-family:var(--m);font-size:11px;color:var(--slate-2)}
+.tblock-h h4{font-family:var(--d);font-size:15px;font-weight:700}
+.lanes{display:grid;grid-template-columns:minmax(210px,1fr) minmax(190px,.85fr) minmax(210px,1fr);gap:0}
+@media(max-width:900px){.lanes{grid-template-columns:1fr}}
+.lane{padding:15px 18px;border-left:1px solid var(--rule-2);min-width:0}
+.lane:first-child{border-left:none}
+.lane-h{font-family:var(--m);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate);margin-bottom:11px;display:flex;gap:7px;align-items:center}
+.node{
+  position:relative;z-index:2;background:#fff;border:1px solid var(--rule-2);border-radius:3px;
+  padding:8px 10px;margin-bottom:7px;font-size:12.5px;line-height:1.4;cursor:default;
+}
+.node .nid{font-family:var(--m);font-size:10px;color:var(--slate-2);margin-right:6px}
+.node.ks{border-left:3px solid}
+.node.ks.K{border-left-color:var(--K)}.node.ks.S{border-left-color:var(--S)}
+.node.ks.A{border-left-color:var(--A)}.node.ks.B{border-left-color:var(--B)}
+.node.orphan{border-color:var(--bad);background:#FEF4F3}
+.node.asmt{background:var(--ink);color:#fff;border-color:var(--ink)}
+.node.asmt .nid{color:var(--signal)}
+.node.asmt .meta{font-family:var(--m);font-size:10px;color:#9AA3AB;margin-top:5px;display:block}
+.node.dim{opacity:.24}
+.node.hot{box-shadow:0 0 0 2px var(--signal);border-color:var(--signal-dim)}
+.trace-hint{font-size:12.5px;color:var(--slate);margin:-4px 0 14px;max-width:74ch}
+.thr{position:relative;z-index:2;background:#fff;border-radius:2px;padding:7px 8px;margin-top:9px;font-size:11.5px;color:var(--slate);line-height:1.5}
+.legend{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.legend span{display:flex;align-items:center;gap:7px;font-family:var(--m);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--slate)}
+.legend i{display:block;width:28px;height:2px;background:var(--ink);opacity:.55;border-radius:1px}
+.legend i.act{background:repeating-linear-gradient(90deg,var(--S) 0 4px,transparent 4px 8px);opacity:.75}
+.legend i.orph{width:12px;height:12px;background:#FEF4F3;border:1px solid var(--bad);border-radius:2px;opacity:1}
+
+/* ---------- quality ---------- */
+.q-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin-bottom:var(--sp)}
+.q-el{background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:14px 15px;display:flex;gap:12px;align-items:flex-start}
+.q-el .num{font-family:var(--d);font-size:24px;font-weight:800;line-height:1;color:var(--rule);flex:none;width:30px}
+.q-el.hit .num{color:var(--ink)}
+.q-el h4{font-size:12.5px;font-weight:600;line-height:1.3;letter-spacing:0}
+.q-el .st{font-family:var(--m);font-size:10px;letter-spacing:.08em;text-transform:uppercase;margin-top:6px;display:block}
+.st.pass{color:var(--ok)} .st.flag{color:var(--bad)} .st.soft{color:var(--warn)} .st.na{color:var(--slate-2)}
+.f-row{display:grid;grid-template-columns:88px 76px 1fr;gap:14px;padding:12px 18px;border-top:1px solid var(--rule-2);align-items:start;font-size:13.5px}
+.f-row:first-child{border-top:none}
+.f-row .sev{font-family:var(--m);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;padding-top:2px}
+.sev.error{color:var(--bad)} .sev.warn{color:var(--warn)} .sev.info{color:var(--slate-2)}
+.f-row .loc{font-family:var(--m);font-size:11px;color:var(--K);text-align:left}
+.f-row .loc:hover{text-decoration:underline}
+.f-row .msg small{display:block;color:var(--slate);font-size:11.5px;margin-top:3px}
+.empty{padding:34px 18px;text-align:center;color:var(--slate);font-size:13.5px}
+.empty strong{display:block;font-family:var(--d);font-size:15px;color:var(--ink);margin-bottom:5px}
+
+/* ---------- export ---------- */
+.ex-actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:var(--sp)}
+.btn{
+  font-family:var(--d);font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+  padding:11px 17px;border-radius:3px;background:var(--ink);color:#fff;border:1px solid var(--ink);
+}
+.btn:hover{background:var(--ink-3)}
+.btn.ghost{background:#fff;color:var(--ink);border-color:var(--rule)}
+.btn.ghost:hover{background:var(--card-2);border-color:var(--ink)}
+.btn.danger{background:#fff;color:var(--bad);border-color:#E5BEBA}
+.btn.danger:hover{background:#FEF4F3}
+pre.out{
+  background:var(--ink);color:#DDE3E8;border-radius:4px;padding:20px;overflow:auto;max-height:620px;
+  font-family:var(--m);font-size:12px;line-height:1.65;white-space:pre-wrap;word-break:break-word;
+}
+.saved{font-family:var(--m);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--slate-2)}
+.notice{background:#FFF8E2;border:1px solid #F0DCA0;border-radius:3px;padding:11px 14px;font-size:12.5px;margin-bottom:14px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+:focus-visible{outline:2px solid var(--signal-dim);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media(max-width:900px){.build{grid-template-columns:1fr}.tree{position:static;max-height:none}}
+@media(max-width:760px){.band-in{grid-template-columns:1fr;gap:14px}.band h2{font-size:19px}}
+html{overflow-x:hidden}
+.chrome-in,.band-in,.tabs-in,main{width:100%}
+</style>
+</head>
+<body>
+
+<header class="chrome">
+  <div class="chrome-in">
+    <div class="brand">
+      <span class="mark"></span>
+      <div>
+        <h1>Competency Architect</h1>
+        <p>WSU Tech · Wichita, Kansas · C-BEN aligned</p>
+      </div>
+    </div>
+    <div class="seg" id="discSeg" role="group" aria-label="Discipline"></div>
+    <div class="track-wrap" id="trackWrap" hidden>
+      <span class="lbl">Track</span>
+      <div class="seg sm" id="trackSeg" role="group" aria-label="Track"></div>
+    </div>
+  </div>
+</header>
+
+<div class="band"><div class="band-in" id="band"></div></div>
+
+<nav class="tabs"><div class="tabs-in" id="tabs"></div></nav>
+
+<main id="main"></main>
+
+<script>
+/* ===== C-BEN Elements of Quality (2017 Quality Framework) ===== */
+const CBEN = {
+  1: "Demonstrated Institutional Commitment to and Capacity for CBE Innovation",
+  2: "Clear, Measurable, Meaningful and Integrated Competencies",
+  3: "Coherent, Competency-Driven Program and Curriculum Design",
+  4: "Credential-Level Assessment Strategy with Robust Implementation",
+  5: "Intentionally Designed and Engaged Student Experience",
+  6: "Collaborative Engagement with External Partners",
+  7: "Transparency of Student Learning",
+  8: "Evidence-Driven Continuous Improvement Processes"
+};
+
+const KTYPE = {
+  K: { label: "Knowledge", hint: "What the learner must know — theory, principles, regulation" },
+  S: { label: "Skill",     hint: "What the learner must do — a discrete, trainable technique" },
+  A: { label: "Ability",   hint: "Applied capacity — transfer of skill into varied, unrehearsed contexts" },
+  B: { label: "Behavior",  hint: "How the learner conducts themselves — professional disposition, habit of practice" }
+};
+
+const EVIDENCE   = ["Performance", "Product", "Process", "Portfolio", "Written / Knowledge"];
+const MODE       = ["Formative", "Summative"];
+const AUTHENTIC  = ["Classroom", "Simulation", "Lab / Shop", "Supervised Workplace", "Independent Workplace"];
+const MODALITY   = ["Didactic", "Guided lab", "Simulation", "Clinical / OJT", "Employer-sited", "Self-paced digital", "Peer / team"];
+const LEVELS     = ["Remembering", "Understanding", "Applying", "Analyzing", "Evaluating", "Creating"];
+
+/* ===== SEED DATA ===== */
+const SEED = {
+
+/* ---------------------------------------------------------------- NURSING */
+rn: {
+  id: "rn",
+  name: "Registered Nursing",
+  program: "Associate Degree Nurse (A.D.N.)",
+  credential: "AAS · Associate Degree Nurse",
+  site: "WSU Tech South — 3821 E. Harry, Wichita",
+  frames: ["NCSBN NCLEX-RN Test Plan", "Kansas State Board of Nursing (KSBN) regs", "ACEN accreditation standards", "QSEN competencies", "NCSBN Clinical Judgment Measurement Model"],
+  partners: ["Ascension Via Christi", "Wesley Healthcare", "Kansas Heart Hospital", "Robert J. Dole VA Medical Center"],
+  tracks: null,
+  domains: [
+    { id: "D1", title: "Clinical Judgment", rationale: "The cognitive core of RN practice: recognizing cues, forming and prioritizing hypotheses, acting, and evaluating. Structured on the NCSBN Clinical Judgment Measurement Model.", cben: [2, 3] },
+    { id: "D2", title: "Person-Centered Care", rationale: "Care planned with, not for, the patient — including communication, cultural responsiveness, and teaching.", cben: [2, 5] },
+    { id: "D3", title: "Safety, Quality & Informatics", rationale: "System-level protection of the patient: error prevention, infection control, and accurate use of the electronic health record.", cben: [2, 4] },
+    { id: "D4", title: "Professional Practice", rationale: "Legal scope under the Kansas Nurse Practice Act, ethical decision-making, accountability, and self-regulation.", cben: [2, 6] },
+    { id: "D5", title: "Collaboration & Care Coordination", rationale: "Functioning inside an interprofessional team: handoff, delegation, supervision, and transitions of care.", cben: [3, 6] }
+  ],
+  competencies: [
+    {
+      id: "C1.1", domain: "D1", track: null, level: "Analyzing", validated: true, validatedBy: "Ascension Via Christi nurse educators, Mar 2026",
+      verb: "Interpret",
+      object: "focused assessment findings for an assigned adult patient",
+      context: "in an acute-care medical-surgical unit, using the patient's chart, vital signs, and physical assessment",
+      criteria: "identifying every abnormal finding and ranking findings by clinical urgency, unprompted, within 20 minutes of assuming care",
+      definition: "The graduate gathers and makes sense of patient data. This is the recognize-cues and analyze-cues portion of clinical judgment: the learner separates expected from unexpected findings and explains why each unexpected finding matters for this patient.",
+      ksabs: [
+        { id: "K1", type: "K", text: "Normal and expected ranges for adult vital signs, common lab values, and physical assessment findings" },
+        { id: "K2", type: "K", text: "Pathophysiology of the most prevalent medical-surgical conditions in the Wichita service area" },
+        { id: "S1", type: "S", text: "Performs a head-to-toe and focused systems assessment using correct technique and sequence" },
+        { id: "S2", type: "S", text: "Locates and extracts relevant data from the electronic health record without supervision" },
+        { id: "A1", type: "A", text: "Distinguishes clinically significant findings from incidental ones in patients with multiple comorbidities" },
+        { id: "B1", type: "B", text: "Reassesses rather than assuming stability when data conflict with the prior shift's report" }
+      ],
+      assessment: {
+        evidence: "Performance", mode: "Summative", authenticity: "Supervised Workplace",
+        threshold: "All safety-critical rubric rows at Proficient; no row below Developing; 2 successful demonstrations on different patients",
+        rubric: [
+          "Completeness of assessment — all indicated systems assessed",
+          "Accuracy — findings match preceptor's independent assessment",
+          "Prioritization — urgent findings named first with rationale",
+          "Data source discipline — chart data verified against patient"
+        ],
+        covers: ["K1", "K2", "S1", "S2", "A1", "B1"]
+      },
+      activities: [
+        { id: "L1", title: "Systems assessment technique lab with standardized patients", modality: "Guided lab", hours: 12, targets: ["S1", "K1"] },
+        { id: "L2", title: "Cue-recognition case series — unfolding EHR scenarios", modality: "Simulation", hours: 8, targets: ["K2", "A1", "S2"] },
+        { id: "L3", title: "Clinical rotation, med-surg, with preceptor debrief on prioritization", modality: "Clinical / OJT", hours: 90, targets: ["A1", "B1", "S1"] }
+      ]
+    },
+    {
+      id: "C1.2", domain: "D1", track: null, level: "Evaluating", validated: true, validatedBy: "Wesley Healthcare clinical council, Mar 2026",
+      verb: "Prioritize",
+      object: "nursing actions for a deteriorating patient",
+      context: "in a simulated and then live acute-care setting with competing demands from multiple assigned patients",
+      criteria: "selecting the highest-acuity action first in 100% of trials, initiating it within 5 minutes of cue recognition, and evaluating patient response before proceeding",
+      definition: "The graduate converts interpretation into timed action. Covers hypothesis generation, prioritization, action, and outcome evaluation — the closing half of the clinical judgment model.",
+      ksabs: [
+        { id: "K1", type: "K", text: "Maslow, ABC, and acuity frameworks for ranking competing nursing actions" },
+        { id: "K2", type: "K", text: "Early warning signs of sepsis, hemorrhage, respiratory failure, and stroke" },
+        { id: "S1", type: "S", text: "Initiates rapid response activation using facility protocol" },
+        { id: "A1", type: "A", text: "Reprioritizes an established care plan when a second patient destabilizes" },
+        { id: "A2", type: "A", text: "Evaluates whether an intervention worked and escalates when it did not" },
+        { id: "B1", type: "B", text: "Speaks up to a physician or charge nurse when the patient picture does not match the plan" }
+      ],
+      assessment: {
+        evidence: "Performance", mode: "Summative", authenticity: "Simulation",
+        threshold: "Passes 3 of 3 high-fidelity deterioration scenarios with zero missed safety-critical actions",
+        rubric: [
+          "Time from cue to first action",
+          "Correctness of the first action selected",
+          "Escalation — right person, right information, right urgency",
+          "Post-intervention reassessment performed and documented"
+        ],
+        covers: ["K1", "K2", "S1", "A1", "A2", "B1"]
+      },
+      activities: [
+        { id: "L1", title: "Deterioration simulation lab, escalating fidelity", modality: "Simulation", hours: 16, targets: ["S1", "A1", "A2"] },
+        { id: "L2", title: "SBAR escalation practice with faculty playing resistant providers", modality: "Peer / team", hours: 4, targets: ["B1", "S1"] },
+        { id: "L3", title: "Acuity ranking seminar using de-identified local case data", modality: "Didactic", hours: 6, targets: ["K1", "K2"] }
+      ]
+    },
+    {
+      id: "C1.3", domain: "D1", track: null, level: "Applying", validated: true, validatedBy: "Program advisory board, Feb 2026",
+      verb: "Administer",
+      object: "prescribed medications across oral, IM, subcutaneous, and IV routes",
+      context: "to assigned adult patients in a supervised clinical setting using barcode medication administration",
+      criteria: "with zero administration errors across 25 consecutive documented passes and independent verification of every high-alert medication",
+      definition: "Safe medication practice as an integrated competency: calculation, route technique, verification, patient education, and documentation, treated as one act rather than separate skills.",
+      ksabs: [
+        { id: "K1", type: "K", text: "Pharmacologic classes, common adverse effects, and high-alert medication list" },
+        { id: "K2", type: "K", text: "Dosage calculation including weight-based and titrated IV rates" },
+        { id: "S1", type: "S", text: "Performs sterile and clean technique appropriate to each route" },
+        { id: "S2", type: "S", text: "Executes barcode scanning and independent double-check procedure" },
+        { id: "A1", type: "A", text: "Recognizes and holds a medication when patient assessment contraindicates it" },
+        { id: "B1", type: "B", text: "Reports a near-miss without prompting and without minimizing it" }
+      ],
+      assessment: {
+        evidence: "Process", mode: "Summative", authenticity: "Supervised Workplace",
+        threshold: "100% on calculation exam (retake permitted); 25 error-free supervised passes logged",
+        rubric: [
+          "Rights of administration verified and observable",
+          "Technique — route-appropriate and aseptic where required",
+          "Patient education delivered before administration",
+          "Documentation timely, accurate, and complete"
+        ],
+        covers: ["K1", "K2", "S1", "S2", "A1", "B1"]
+      },
+      activities: [
+        { id: "L1", title: "Dosage calculation module with mastery retesting", modality: "Self-paced digital", hours: 10, targets: ["K2"] },
+        { id: "L2", title: "Injection and IV technique lab", modality: "Guided lab", hours: 14, targets: ["S1"] },
+        { id: "L3", title: "Supervised medication pass rotation", modality: "Clinical / OJT", hours: 60, targets: ["S2", "A1", "B1", "K1"] }
+      ]
+    },
+    {
+      id: "C2.1", domain: "D2", track: null, level: "Applying", validated: true, validatedBy: "Ascension Via Christi patient experience team, Mar 2026",
+      verb: "Conduct",
+      object: "a therapeutic interview that elicits the patient's concerns, priorities, and understanding",
+      context: "with adult patients including those in distress, with limited English proficiency, or with cognitive impairment",
+      criteria: "using at least four distinct therapeutic techniques, no blocking responses, and an accurate teach-back summary confirmed by the patient",
+      definition: "Communication treated as a clinical intervention, not a soft skill. The graduate builds enough trust and clarity to obtain information that changes the care plan.",
+      ksabs: [
+        { id: "K1", type: "K", text: "Therapeutic communication techniques and common blocking responses" },
+        { id: "K2", type: "K", text: "Working use of qualified interpreter services and Kansas language-access expectations" },
+        { id: "S1", type: "S", text: "Uses open-ended questioning, reflection, silence, and clarification deliberately" },
+        { id: "S2", type: "S", text: "Conducts teach-back and adjusts explanation when the patient cannot restate it" },
+        { id: "A1", type: "A", text: "Adapts approach mid-conversation when the patient becomes guarded or distressed" },
+        { id: "B1", type: "B", text: "Sits at eye level, silences interruptions, and gives the patient uninterrupted time to answer" }
+      ],
+      assessment: {
+        evidence: "Performance", mode: "Summative", authenticity: "Simulation",
+        threshold: "Proficient on all rubric rows in a recorded standardized-patient encounter, plus one preceptor-observed live encounter",
+        rubric: [
+          "Technique variety and appropriateness",
+          "Absence of blocking or premature reassurance",
+          "Teach-back accuracy",
+          "Patient-reported feeling of being heard (standardized patient rating)"
+        ],
+        covers: ["K1", "K2", "S1", "S2", "A1", "B1"]
+      },
+      activities: [
+        { id: "L1", title: "Recorded standardized-patient encounters with self-review", modality: "Simulation", hours: 10, targets: ["S1", "A1", "B1"] },
+        { id: "L2", title: "Interpreter-mediated encounter workshop", modality: "Guided lab", hours: 4, targets: ["K2", "S2"] }
+      ]
+    },
+    {
+      id: "C2.2", domain: "D2", track: null, level: "Creating", validated: false, validatedBy: "",
+      verb: "Develop",
+      object: "an individualized plan of care reflecting patient values, resources, and social determinants",
+      context: "for adult patients being discharged to home or a post-acute setting in Sedgwick County",
+      criteria: "with goals stated in the patient's own priorities, at least two identified barriers addressed with named local resources, and patient agreement documented",
+      definition: "Planning that starts from the patient's life rather than the diagnosis. Explicitly includes the local resource landscape so the plan survives discharge.",
+      ksabs: [
+        { id: "K1", type: "K", text: "Social determinants of health and their documented impact on readmission" },
+        { id: "K2", type: "K", text: "Sedgwick County post-acute, transportation, food, and medication-assistance resources" },
+        { id: "S1", type: "S", text: "Writes measurable, patient-owned goals with target dates" },
+        { id: "A1", type: "A", text: "Reconciles clinically ideal recommendations with what the patient can actually sustain" },
+        { id: "B1", type: "B", text: "Asks about cost, transport, and caregiving before finalizing a plan" }
+      ],
+      assessment: {
+        evidence: "Product", mode: "Summative", authenticity: "Supervised Workplace",
+        threshold: "Two care plans rated Proficient by preceptor, at least one for a patient with identified social risk",
+        rubric: [
+          "Goals traceable to stated patient priorities",
+          "Barriers named specifically, not generically",
+          "Resources are real, local, and currently available",
+          "Evidence of patient participation in the plan"
+        ],
+        covers: ["K1", "K2", "S1", "A1", "B1"]
+      },
+      activities: [
+        { id: "L1", title: "Community resource field mapping assignment", modality: "Self-paced digital", hours: 6, targets: ["K2"] },
+        { id: "L2", title: "Care plan workshop with case handoffs between peers", modality: "Peer / team", hours: 8, targets: ["S1", "A1"] }
+      ]
+    },
+    {
+      id: "C3.1", domain: "D3", track: null, level: "Applying", validated: true, validatedBy: "Wesley Healthcare quality dept., Feb 2026",
+      verb: "Apply",
+      object: "error-prevention and infection-control practices",
+      context: "throughout a full patient assignment in an acute-care unit",
+      criteria: "with 100% observed hand hygiene compliance, correct isolation precautions for every indicated patient, and any near-miss reported through the facility system within the shift",
+      definition: "Safety as continuous practice rather than a checklist event. Combines hand hygiene, isolation, line and catheter care, and the willingness to report.",
+      ksabs: [
+        { id: "K1", type: "K", text: "Chain of infection, standard and transmission-based precautions" },
+        { id: "K2", type: "K", text: "Just-culture principles and facility event-reporting pathways" },
+        { id: "S1", type: "S", text: "Dons and doffs PPE in correct sequence without self-contamination" },
+        { id: "S2", type: "S", text: "Performs central line and indwelling catheter maintenance per bundle" },
+        { id: "B1", type: "B", text: "Reports own errors and near-misses promptly and completely" },
+        { id: "B2", type: "B", text: "Stops a colleague's unsafe practice using a graded assertiveness script" }
+      ],
+      assessment: {
+        evidence: "Process", mode: "Summative", authenticity: "Supervised Workplace",
+        threshold: "Zero observed breaches across 3 unannounced clinical audits",
+        rubric: [
+          "Hand hygiene at all five moments",
+          "PPE sequence and integrity",
+          "Bundle adherence for lines and catheters",
+          "Reporting behavior when a lapse occurs"
+        ],
+        covers: ["K1", "S1", "S2", "B1"]
+      },
+      activities: [
+        { id: "L1", title: "PPE and isolation skills lab with fluorescent contamination check", modality: "Guided lab", hours: 6, targets: ["S1", "K1"] },
+        { id: "L2", title: "Just-culture case seminar with a hospital risk manager", modality: "Employer-sited", hours: 3, targets: ["K2", "B1"] }
+      ]
+    },
+    {
+      id: "C3.2", domain: "D3", track: null, level: "Applying", validated: true, validatedBy: "Program advisory board, Feb 2026",
+      verb: "Document",
+      object: "assessment, intervention, and patient response in the electronic health record",
+      context: "in real time during a supervised clinical shift",
+      criteria: "with entries complete before end of shift, no copy-forward of stale data, and narrative that a receiving nurse can act on without clarification",
+      definition: "Informatics competence expressed as usable clinical communication — the record as an instrument of continuity, not a compliance artifact.",
+      ksabs: [
+        { id: "K1", type: "K", text: "Legal standards for the health record and correction of entries" },
+        { id: "K2", type: "K", text: "Structured data vs. narrative — what belongs where and why" },
+        { id: "S1", type: "S", text: "Navigates and charts efficiently in the clinical EHR" },
+        { id: "A1", type: "A", text: "Writes narrative that conveys clinical reasoning, not just observation" },
+        { id: "B1", type: "B", text: "Charts contemporaneously rather than reconstructing at end of shift" }
+      ],
+      assessment: {
+        evidence: "Portfolio", mode: "Summative", authenticity: "Supervised Workplace",
+        threshold: "Five de-identified chart samples rated Proficient on all rows",
+        rubric: [
+          "Completeness against the shift's events",
+          "Timeliness of entry",
+          "Clarity — actionable by a receiving nurse",
+          "Accuracy and absence of copy-forward error"
+        ],
+        covers: ["K1", "K2", "S1", "A1", "B1"]
+      },
+      activities: [
+        { id: "L1", title: "EHR training environment with graded charting exercises", modality: "Self-paced digital", hours: 8, targets: ["S1", "K2"] },
+        { id: "L2", title: "Chart audit exchange — students audit peers against the rubric", modality: "Peer / team", hours: 4, targets: ["A1", "K1"] }
+      ]
+    },
+    {
+      id: "C4.1", domain: "D4", track: null, level: "Evaluating", validated: true, validatedBy: "KSBN-aligned faculty review, Jan 2026",
+      verb: "Practice",
+      object: "within the legal scope of the registered nurse under the Kansas Nurse Practice Act",
+      context: "across clinical assignments including situations where a request exceeds RN scope or conflicts with policy",
+      criteria: "correctly identifying scope boundaries in 100% of assessed scenarios and declining or escalating out-of-scope requests with documented rationale",
+      definition: "Scope literacy as an active competency: the graduate can say what they may do, may not do, and what to do when asked to cross the line.",
+      ksabs: [
+        { id: "K1", type: "K", text: "Kansas Nurse Practice Act scope provisions and KSBN disciplinary grounds" },
+        { id: "K2", type: "K", text: "Distinction between scope of practice, facility policy, and personal competence" },
+        { id: "A1", type: "A", text: "Analyzes an ambiguous request against scope, policy, and own competence in real time" },
+        { id: "B1", type: "B", text: "Declines out-of-scope tasks respectfully and escalates rather than complying silently" },
+        { id: "B2", type: "B", text: "Maintains patient confidentiality including on personal devices and social media" }
+      ],
+      assessment: {
+        evidence: "Written / Knowledge", mode: "Summative", authenticity: "Classroom",
+        threshold: "90% on scope scenario examination plus a passing scored discussion of one ambiguous case",
+        rubric: [
+          "Correct scope determination",
+          "Rationale cites the governing provision",
+          "Escalation pathway named correctly",
+          "Confidentiality reasoning sound"
+        ],
+        covers: ["K1", "K2", "A1", "B1"]
+      },
+      activities: [
+        { id: "L1", title: "Nurse Practice Act close-reading seminar", modality: "Didactic", hours: 6, targets: ["K1", "K2"] },
+        { id: "L2", title: "Scope dilemma role-play with escalation scripts", modality: "Peer / team", hours: 4, targets: ["A1", "B1"] }
+      ]
+    },
+    {
+      id: "C5.1", domain: "D5", track: null, level: "Applying", validated: true, validatedBy: "Robert J. Dole VA nurse managers, Mar 2026",
+      verb: "Deliver",
+      object: "a structured handoff and interprofessional communication",
+      context: "at shift change, on transfer, and during rounds with providers, therapy, pharmacy, and social work",
+      criteria: "using SBAR or facility-adopted format with zero omitted safety-critical items across 10 observed handoffs",
+      definition: "The graduate transfers responsibility for a patient without loss of information, and contributes the nursing perspective in team decision-making.",
+      ksabs: [
+        { id: "K1", type: "K", text: "SBAR structure and the safety-critical minimum data set for handoff" },
+        { id: "K2", type: "K", text: "Roles and decision authority of each discipline on the care team" },
+        { id: "S1", type: "S", text: "Delivers a concise, sequenced verbal handoff without reading the chart aloud" },
+        { id: "A1", type: "A", text: "Adjusts depth and framing for the receiving audience" },
+        { id: "B1", type: "B", text: "Contributes the nursing view in rounds rather than waiting to be asked" }
+      ],
+      assessment: {
+        evidence: "Performance", mode: "Summative", authenticity: "Supervised Workplace",
+        threshold: "10 observed handoffs, all rows Proficient, no safety-critical omissions",
+        rubric: [
+          "Structure followed",
+          "Safety-critical items all present",
+          "Concision — under 4 minutes per patient",
+          "Receiver questions answered accurately"
+        ],
+        covers: ["K1", "K2", "S1", "A1", "B1"]
+      },
+      activities: [
+        { id: "L1", title: "Handoff drill with timed peer receivers", modality: "Peer / team", hours: 5, targets: ["S1", "K1"] },
+        { id: "L2", title: "Interprofessional rounds observation and participation", modality: "Clinical / OJT", hours: 20, targets: ["K2", "A1", "B1"] }
+      ]
+    },
+    {
+      id: "C5.2", domain: "D5", track: null, level: "Evaluating", validated: true, validatedBy: "Ascension Via Christi nurse managers, Apr 2026",
+      verb: "Delegate",
+      object: "nursing tasks to certified nurse aides and other assistive personnel",
+      context: "while carrying a full patient assignment on a medical-surgical unit, under the Kansas Nurse Practice Act and facility policy",
+      criteria: "matching every delegated task to the five rights of delegation, stating the expected outcome and the conditions requiring report at the time of assignment, and verifying completion before end of shift — with zero out-of-scope delegations across 15 observed assignments",
+      definition: "Delegation is a decision the RN remains accountable for. The graduate judges what may be delegated to whom for this specific patient, communicates the assignment so the aide knows what to report and when, and closes the loop before the shift ends.",
+      ksabs: [
+        { id: "K1", type: "K", text: "Five rights of delegation and Kansas rules on continuing RN accountability for delegated tasks" },
+        { id: "K2", type: "K", text: "Scope and training limits of CNAs, techs, and unlicensed assistive personnel in Kansas facilities" },
+        { id: "S1", type: "S", text: "States the task, the expected outcome, the deadline, and the report-back trigger in a single assignment" },
+        { id: "A1", type: "A", text: "Judges delegability from the specific patient's stability and the specific aide's demonstrated competence, not the task label alone" },
+        { id: "B1", type: "B", text: "Verifies delegated work was completed rather than assuming it" },
+        { id: "B2", type: "B", text: "Gives corrective feedback to assistive personnel directly and without hostility" }
+      ],
+      assessment: {
+        evidence: "Performance", mode: "Summative", authenticity: "Supervised Workplace",
+        threshold: "15 observed delegation events with zero out-of-scope assignments and documented follow-up on every delegated task",
+        rubric: [
+          "Delegability decision correct for this patient and this delegatee",
+          "Assignment communicated with outcome, deadline, and report-back trigger",
+          "Follow-up and verification performed before end of shift",
+          "Feedback to assistive personnel — direct, specific, respectful"
+        ],
+        covers: ["K1", "K2", "S1", "A1", "B1", "B2"]
+      },
+      activities: [
+        { id: "L1", title: "Five rights of delegation seminar with Kansas scope cases", modality: "Didactic", hours: 4, targets: ["K1", "K2"] },
+        { id: "L2", title: "Delegation and feedback role-play with faculty as assistive personnel", modality: "Peer / team", hours: 5, targets: ["S1", "B2"] },
+        { id: "L3", title: "Clinical rotation with charge-nurse shadowing and delegation log", modality: "Clinical / OJT", hours: 40, targets: ["A1", "B1", "S1"] }
+      ]
+    }
+  ]
+},
+
+/* -------------------------------------------------------------- AVIATION */
+avi: {
+  id: "avi",
+  name: "Aviation Maintenance",
+  program: "Aviation Maintenance Technology (A&P)",
+  credential: "AAS · Airframe & Powerplant",
+  site: "National Center for Aviation Training — 4004 N. Webb Rd, Wichita",
+  frames: ["14 CFR Part 147 Appendices B/C/D", "14 CFR Part 43 & 65", "FAA Airman Certification Standards (AMT)", "ATEC competency work", "OEM maintenance manuals (Textron, Bombardier, Spirit AeroSystems suppliers)"],
+  partners: ["Textron Aviation", "Spirit AeroSystems", "Bombardier Learjet", "Yingling Aviation", "Wichita-area Part 145 repair stations"],
+  tracks: null,
+  domains: [
+    { id: "D1", title: "General Aeronautical Foundations", rationale: "The Part 147 'General' subject areas that underlie both airframe and powerplant work: publications, electricity, weight and balance, materials, and mathematics.", cben: [2, 3] },
+    { id: "D2", title: "Airframe Structures & Systems", rationale: "Structural repair, hydraulics, landing gear, environmental and airframe inspection — the airframe rating body of practice.", cben: [2, 4] },
+    { id: "D3", title: "Powerplant Theory & Maintenance", rationale: "Reciprocating and turbine engines, fuel and ignition systems, and engine inspection to the powerplant rating standard.", cben: [2, 4] },
+    { id: "D4", title: "Airworthiness & Professional Conduct", rationale: "The legal and human dimension of the certificate: records, return to service, and the human factors that dominate maintenance error data.", cben: [2, 6, 7] }
+  ],
+  competencies: [
+    {
+      id: "C1.1", domain: "D1", track: null, level: "Applying", validated: true, validatedBy: "Textron Aviation maintenance training, Feb 2026",
+      verb: "Locate",
+      object: "the governing maintenance data for a specified task",
+      context: "using current OEM maintenance manuals, ADs, service bulletins, and 14 CFR, in a hangar environment with electronic and paper sources",
+      criteria: "citing the correct document, revision, and paragraph within 10 minutes for 10 of 10 assigned tasks, and identifying any applicable AD",
+      definition: "Before any wrench turns, the technician must find and verify the approved data. This competency establishes regulatory research as a routine first step rather than an afterthought.",
+      ksabs: [
+        { id: "K1", type: "K", text: "Structure of 14 CFR Parts 21, 39, 43, 65, 91 and where each applies" },
+        { id: "K2", type: "K", text: "Difference between approved data, acceptable data, and manufacturer recommendation" },
+        { id: "S1", type: "S", text: "Searches ATA-chapter-organized manuals and electronic AD databases" },
+        { id: "S2", type: "S", text: "Verifies revision currency before relying on a document" },
+        { id: "A1", type: "A", text: "Resolves conflicts between OEM instruction and regulatory requirement" },
+        { id: "B1", type: "B", text: "Refuses to proceed on memory when the data is available to check" }
+      ],
+      assessment: {
+        evidence: "Performance", mode: "Summative", authenticity: "Lab / Shop",
+        threshold: "10 of 10 timed research tasks correct, including at least two with an applicable AD",
+        rubric: [
+          "Correct document identified",
+          "Revision currency verified and stated",
+          "Applicable ADs found",
+          "Time to locate within standard"
+        ],
+        covers: ["K1", "K2", "S1", "S2", "A1", "B1"]
+      },
+      activities: [
+        { id: "L1", title: "Regulatory structure and AD research workshop", modality: "Didactic", hours: 8, targets: ["K1", "K2"] },
+        { id: "L2", title: "Timed manual-search drills against live OEM data", modality: "Guided lab", hours: 10, targets: ["S1", "S2"] },
+        { id: "L3", title: "Repair station shadow day — how data control works in a Part 145", modality: "Employer-sited", hours: 8, targets: ["A1", "B1"] }
+      ]
+    },
+    {
+      id: "C1.2", domain: "D1", track: null, level: "Analyzing", validated: true, validatedBy: "NCAT faculty + Yingling Aviation, Jan 2026",
+      verb: "Troubleshoot",
+      object: "aircraft electrical circuits and components",
+      context: "on a training airframe using wiring diagrams, a digital multimeter, and standard shop test equipment",
+      criteria: "isolating the fault to the correct component or wire segment in 8 of 10 faulted circuits without removing serviceable parts",
+      definition: "Electrical fault isolation by measurement and diagram reading rather than parts swapping. The no-unnecessary-removal criterion is what separates a technician from a parts changer.",
+      ksabs: [
+        { id: "K1", type: "K", text: "DC and AC theory, Ohm's law, series and parallel behavior in aircraft systems" },
+        { id: "K2", type: "K", text: "Aircraft wiring diagram conventions, wire numbering, and bonding requirements" },
+        { id: "S1", type: "S", text: "Operates a DMM for continuity, voltage drop, and resistance measurement correctly" },
+        { id: "S2", type: "S", text: "Fabricates and inspects terminations, splices, and connector pins to spec" },
+        { id: "A1", type: "A", text: "Builds a fault hypothesis from symptoms and tests it in a sequence that eliminates the most candidates" },
+        { id: "B1", type: "B", text: "Documents each test and result rather than relying on recall at write-up" }
+      ],
+      assessment: {
+        evidence: "Performance", mode: "Summative", authenticity: "Lab / Shop",
+        threshold: "8 of 10 faulted circuits isolated correctly; zero serviceable components removed",
+        rubric: [
+          "Fault correctly isolated",
+          "Test sequence logical and efficient",
+          "Meter use and safety correct",
+          "Unnecessary removals — none"
+        ],
+        covers: ["K1", "K2", "S1", "S2", "A1", "B1"]
+      },
+      activities: [
+        { id: "L1", title: "Aircraft electrical theory with circuit board practicals", modality: "Didactic", hours: 20, targets: ["K1"] },
+        { id: "L2", title: "Fault-inserted troubleshooting rig sessions", modality: "Guided lab", hours: 24, targets: ["S1", "A1"] },
+        { id: "L3", title: "Wire termination and connector build to AC 43.13 standard", modality: "Guided lab", hours: 12, targets: ["S2", "K2"] }
+      ]
+    },
+    {
+      id: "C1.3", domain: "D1", track: null, level: "Applying", validated: true, validatedBy: "Program advisory committee, Jan 2026",
+      verb: "Compute",
+      object: "aircraft weight and balance and the effect of equipment change",
+      context: "for a light aircraft using actual scale data, the equipment list, and the flight manual",
+      criteria: "producing a correct CG and loading result within limits, with all arms and moments traceable, on 3 of 3 assessed aircraft",
+      definition: "Weight and balance treated as a documented calculation with airworthiness consequence, including the amendment of records after an equipment change.",
+      ksabs: [
+        { id: "K1", type: "K", text: "Datum, arm, moment, CG range, and the effect of equipment installation or removal" },
+        { id: "S1", type: "S", text: "Performs an actual weighing including leveling, scale zeroing, and tare correction" },
+        { id: "S2", type: "S", text: "Prepares an amended weight and balance record and equipment list" },
+        { id: "A1", type: "A", text: "Determines whether a proposed installation keeps the aircraft within limits before work begins" },
+        { id: "B1", type: "B", text: "Cross-checks arithmetic with a second method before signing" }
+      ],
+      assessment: {
+        evidence: "Product", mode: "Summative", authenticity: "Lab / Shop",
+        threshold: "3 of 3 weighings with correct CG and a complete, signable amended record",
+        rubric: [
+          "Weighing procedure correct",
+          "Computation accurate and traceable",
+          "Amended record complete",
+          "Limits interpretation correct"
+        ],
+        covers: ["K1", "S1", "S2", "A1", "B1"]
+      },
+      activities: [
+        { id: "L1", title: "Weight and balance computation set with graded problems", modality: "Self-paced digital", hours: 8, targets: ["K1"] },
+        { id: "L2", title: "Live aircraft weighing on the NCAT ramp", modality: "Guided lab", hours: 8, targets: ["S1", "S2"] }
+      ]
+    },
+    {
+      id: "C2.1", domain: "D2", track: null, level: "Creating", validated: true, validatedBy: "Spirit AeroSystems structures training, Feb 2026",
+      verb: "Fabricate",
+      object: "a sheet metal structural repair",
+      context: "on an aluminum airframe test panel using approved data, shop tooling, and a written repair scheme",
+      criteria: "meeting AC 43.13-1B and OEM edge distance, rivet spacing, and hole quality standards with zero rejected rivets on final inspection",
+      definition: "The signature airframe skill. Includes producing the repair scheme, not just executing one handed to the learner — that is what makes it a competency rather than a task.",
+      ksabs: [
+        { id: "K1", type: "K", text: "Aluminum alloy designations, temper, heat treat, and corrosion behavior" },
+        { id: "K2", type: "K", text: "Edge distance, pitch, transverse pitch, and rivet selection rules" },
+        { id: "S1", type: "S", text: "Lays out, drills, deburrs, and countersinks to tolerance" },
+        { id: "S2", type: "S", text: "Forms, bends, and flutes sheet stock with correct bend allowance" },
+        { id: "S3", type: "S", text: "Drives and inspects solid rivets and installs blind fasteners" },
+        { id: "A1", type: "A", text: "Designs a repair scheme for damage not covered by a manual example" },
+        { id: "B1", type: "B", text: "Maintains foreign object damage discipline and tool control throughout" }
+      ],
+      assessment: {
+        evidence: "Product", mode: "Summative", authenticity: "Lab / Shop",
+        threshold: "Repair passes dimensional and visual inspection with zero rejected rivets; repair scheme approved before fabrication",
+        rubric: [
+          "Repair scheme correct and referenced to approved data",
+          "Layout accuracy and edge distance",
+          "Rivet quality — shop head dimensions in tolerance",
+          "Finish, corrosion protection, and FOD control"
+        ],
+        covers: ["K1", "K2", "S1", "S2", "S3", "A1", "B1"]
+      },
+      activities: [
+        { id: "L1", title: "Sheet metal fundamentals — layout, drilling, riveting progression", modality: "Guided lab", hours: 40, targets: ["S1", "S2", "S3"] },
+        { id: "L2", title: "Repair scheme design studio with instructor critique", modality: "Peer / team", hours: 10, targets: ["A1", "K2"] },
+        { id: "L3", title: "Structures plant tour and FOD program briefing", modality: "Employer-sited", hours: 4, targets: ["B1", "K1"] }
+      ]
+    },
+    {
+      id: "C2.2", domain: "D2", track: null, level: "Analyzing", validated: true, validatedBy: "Bombardier Learjet service center, Feb 2026",
+      verb: "Service",
+      object: "landing gear and hydraulic systems",
+      context: "on an aircraft or system trainer with the aircraft on jacks, following the maintenance manual procedure",
+      criteria: "completing retraction test, rigging check, and leak check to manual tolerance with no dropped safety step and correct jacking and safetying throughout",
+      definition: "A high-consequence airframe system where procedural discipline and personal safety are inseparable from technical outcome.",
+      ksabs: [
+        { id: "K1", type: "K", text: "Hydraulic principles, fluid types and incompatibility, and system schematics" },
+        { id: "K2", type: "K", text: "Jacking, shoring, and gear pin safety requirements" },
+        { id: "S1", type: "S", text: "Jacks an aircraft and installs gear safety devices correctly" },
+        { id: "S2", type: "S", text: "Performs retraction test and adjusts rigging to manual values" },
+        { id: "S3", type: "S", text: "Services accumulators, replaces seals, and bleeds systems without contamination" },
+        { id: "A1", type: "A", text: "Traces an intermittent gear-indication fault across electrical and hydraulic domains" },
+        { id: "B1", type: "B", text: "Stops the job and clears the area before any powered gear cycle" }
+      ],
+      assessment: {
+        evidence: "Process", mode: "Summative", authenticity: "Lab / Shop",
+        threshold: "Full procedure completed with zero safety-critical step omissions across 2 evaluated events",
+        rubric: [
+          "Jacking and safetying correct",
+          "Retraction test executed to procedure",
+          "Rigging values within tolerance",
+          "Contamination and leak control"
+        ],
+        covers: ["K1", "K2", "S1", "S2", "S3", "B1"]
+      },
+      activities: [
+        { id: "L1", title: "Hydraulic system theory and schematic reading", modality: "Didactic", hours: 12, targets: ["K1"] },
+        { id: "L2", title: "Gear swing and rigging lab", modality: "Guided lab", hours: 20, targets: ["S1", "S2", "B1"] },
+        { id: "L3", title: "Seal replacement and system bleed practical", modality: "Guided lab", hours: 10, targets: ["S3"] }
+      ]
+    },
+    {
+      id: "C3.1", domain: "D3", track: null, level: "Analyzing", validated: true, validatedBy: "Yingling Aviation shop leads, Jan 2026",
+      verb: "Diagnose",
+      object: "reciprocating engine performance faults",
+      context: "on a running test-cell engine and installed aircraft engine using engine instruments, compression testing, and borescope",
+      criteria: "correctly identifying the failed system or component in 7 of 9 inserted faults, supported by measured evidence rather than inference alone",
+      definition: "Powerplant diagnosis grounded in measurement. The evidence requirement in the criteria is deliberate: a right answer for the wrong reason does not pass.",
+      ksabs: [
+        { id: "K1", type: "K", text: "Four-stroke theory, valve timing, and the effect of each on measurable symptoms" },
+        { id: "K2", type: "K", text: "Interpretation of differential compression, oil analysis, and borescope findings" },
+        { id: "S1", type: "S", text: "Performs differential compression test and borescope inspection correctly" },
+        { id: "S2", type: "S", text: "Runs an engine safely and reads engine instrumentation under load" },
+        { id: "A1", type: "A", text: "Correlates symptom, measurement, and engine theory into a defensible diagnosis" },
+        { id: "B1", type: "B", text: "Records measured values at the time of measurement, not afterward" }
+      ],
+      assessment: {
+        evidence: "Performance", mode: "Summative", authenticity: "Lab / Shop",
+        threshold: "7 of 9 inserted faults diagnosed with supporting measurements documented",
+        rubric: [
+          "Diagnosis correct",
+          "Measurements taken correctly and safely",
+          "Reasoning traceable from data to conclusion",
+          "Engine run safety and ground handling"
+        ],
+        covers: ["K1", "K2", "S1", "S2", "A1", "B1"]
+      },
+      activities: [
+        { id: "L1", title: "Reciprocating engine theory and teardown", modality: "Guided lab", hours: 30, targets: ["K1"] },
+        { id: "L2", title: "Compression and borescope practical rotation", modality: "Guided lab", hours: 14, targets: ["S1", "K2"] },
+        { id: "L3", title: "Engine run and fault-insertion sessions in the test cell", modality: "Guided lab", hours: 16, targets: ["S2", "A1"] }
+      ]
+    },
+    {
+      id: "C3.2", domain: "D3", track: null, level: "Applying", validated: true, validatedBy: "Textron Aviation, Feb 2026",
+      verb: "Inspect",
+      object: "a turbine engine and its modules for continued airworthiness",
+      context: "using the OEM inspection procedure, borescope, and gas path measurements on an engine trainer",
+      criteria: "identifying all inserted discrepancies, classifying each as serviceable, repairable, or scrap per manual limits, with zero false serviceable calls",
+      definition: "Turbine work is inspection-dominant. The zero-false-serviceable criterion reflects the actual consequence structure of the job.",
+      ksabs: [
+        { id: "K1", type: "K", text: "Turbine engine sections, airflow, station numbering, and performance parameters" },
+        { id: "K2", type: "K", text: "Damage classification terminology and OEM serviceable limits" },
+        { id: "S1", type: "S", text: "Operates a borescope and interprets gas path images" },
+        { id: "S2", type: "S", text: "Measures and records blade and vane damage against limits" },
+        { id: "A1", type: "A", text: "Judges borderline damage against limits and escalates ambiguity rather than guessing" },
+        { id: "B1", type: "B", text: "Reports a finding that will cost the shop time rather than letting it pass" }
+      ],
+      assessment: {
+        evidence: "Process", mode: "Summative", authenticity: "Lab / Shop",
+        threshold: "All inserted discrepancies found; zero false serviceable classifications",
+        rubric: [
+          "Discrepancy detection rate",
+          "Classification against manual limits",
+          "Borescope technique and image quality",
+          "Escalation of ambiguous findings"
+        ],
+        covers: ["K1", "K2", "S1", "S2", "A1", "B1"]
+      },
+      activities: [
+        { id: "L1", title: "Turbine theory and module familiarization", modality: "Didactic", hours: 18, targets: ["K1"] },
+        { id: "L2", title: "Borescope lab with graded discrepancy hunts", modality: "Guided lab", hours: 16, targets: ["S1", "S2", "A1"] }
+      ]
+    },
+    {
+      id: "C4.1", domain: "D4", track: null, level: "Evaluating", validated: true, validatedBy: "Part 145 quality managers roundtable, Feb 2026",
+      verb: "Compose",
+      object: "a maintenance record entry that supports approval for return to service",
+      context: "for completed work on an aircraft or component, under 14 CFR 43.9 and 43.11",
+      criteria: "containing every required element, describing work performed accurately, citing the data used, and surviving a mock FAA records audit with zero findings",
+      definition: "The legal product of maintenance. A technically perfect repair with a defective entry is not an airworthy aircraft — this competency makes that explicit.",
+      ksabs: [
+        { id: "K1", type: "K", text: "14 CFR 43.9 and 43.11 required record elements and 65.95 privileges and limitations" },
+        { id: "K2", type: "K", text: "Difference between a maintenance entry, an inspection entry, and a major repair 337" },
+        { id: "S1", type: "S", text: "Writes an entry in complete, unambiguous, auditable language" },
+        { id: "S2", type: "S", text: "Prepares FAA Form 337 for a major repair or alteration" },
+        { id: "A1", type: "A", text: "Determines whether work performed is major or minor and records it accordingly" },
+        { id: "B1", type: "B", text: "Signs only for work personally performed or personally supervised" }
+      ],
+      assessment: {
+        evidence: "Product", mode: "Summative", authenticity: "Lab / Shop",
+        threshold: "Six entries and one Form 337 pass a mock audit with zero findings",
+        rubric: [
+          "All required elements present",
+          "Description accurate and specific",
+          "Data reference correct",
+          "Major/minor determination correct"
+        ],
+        covers: ["K1", "K2", "S1", "S2", "A1", "B1"]
+      },
+      activities: [
+        { id: "L1", title: "Records workshop with real (redacted) logbook examples", modality: "Didactic", hours: 8, targets: ["K1", "K2"] },
+        { id: "L2", title: "Mock FAA records audit run by an employer partner", modality: "Employer-sited", hours: 6, targets: ["S1", "A1", "B1"] }
+      ]
+    },
+    {
+      id: "C4.2", domain: "D4", track: null, level: "Evaluating", validated: false, validatedBy: "",
+      verb: "Apply",
+      object: "human factors countermeasures in maintenance work",
+      context: "throughout shop and hangar tasks, including shift-change and time-pressure conditions",
+      criteria: "using a documented countermeasure for each of the Dirty Dozen encountered during a two-week shop block, verified by supervisor observation",
+      definition: "Maintenance error data is dominated by human factors, not knowledge gaps. This competency makes error-resistance an assessed outcome rather than a briefing.",
+      ksabs: [
+        { id: "K1", type: "K", text: "The Dirty Dozen human factors and their documented accident contribution" },
+        { id: "K2", type: "K", text: "Fatigue, normalization of deviance, and pressure as system rather than personal failures" },
+        { id: "S1", type: "S", text: "Executes a formal turnover when leaving a task incomplete" },
+        { id: "A1", type: "A", text: "Recognizes own degraded state and takes a countermeasure before continuing" },
+        { id: "B1", type: "B", text: "Raises a concern about pressure or shortcut culture through the safety reporting system" }
+      ],
+      assessment: {
+        evidence: "Portfolio", mode: "Formative", authenticity: "Lab / Shop",
+        threshold: "Reflective log accepted by instructor",
+        rubric: [
+          "Countermeasures specific and applied, not described",
+          "Honest identification of own error events"
+        ],
+        covers: ["K1", "S1"]
+      },
+      activities: [
+        { id: "L1", title: "Human factors in maintenance seminar", modality: "Didactic", hours: 6, targets: ["K1", "K2"] }
+      ]
+    }
+  ]
+},
+
+/* ------------------------------------------------------------ AUTOMOTIVE */
+auto: {
+  id: "auto",
+  name: "Automotive Technology",
+  program: "Automotive Technology / Alternative Fuel Vehicle Maintenance & Advanced Electronics",
+  credential: "AAS · Automotive Technology · AAS · AFV Maintenance & Advanced Electronics",
+  site: "WSU Tech — Wichita, Kansas",
+  frames: ["ASE Education Foundation program standards", "ASE A-series and L3 certification", "NFPA 70E electrical safety", "SAE J2990 hybrid/EV first responder & service practice", "OEM service information systems"],
+  partners: ["Wichita-area franchise dealer groups", "Independent repair network", "Fleet operators (municipal & utility)", "Alternative-fuel fleet partners"],
+  tracks: [
+    { id: "ice", label: "Combustion (ICE)" },
+    { id: "ev",  label: "Electric / Alt-Fuel" }
+  ],
+  domains: [
+    { id: "D1", title: "Shop Foundations & Service Operations", rationale: "Safety, hazardous materials, service information, work orders, and customer-facing communication — the operating conditions every repair happens inside.", cben: [2, 3] },
+    { id: "D2", title: "Electrical & Electronic Systems", rationale: "The fastest-growing failure domain in both powertrain types, and the shared technical spine between the combustion and electric tracks.", cben: [2, 4] },
+    { id: "D3", title: "Powertrain Diagnosis & Repair", rationale: "Where the two tracks diverge: engine performance and fuel/ignition on one side, electric drive and high-voltage energy storage on the other.", cben: [2, 3, 4] },
+    { id: "D4", title: "Chassis, Braking & Steering", rationale: "Common across both tracks, with regenerative braking creating a genuine difference in diagnostic approach.", cben: [2, 4] },
+    { id: "D5", title: "Diagnostic Discipline & Professional Practice", rationale: "The habits that separate a diagnostician from a parts replacer — and the ones employers name first when asked what is missing in new hires.", cben: [2, 6, 8] }
+  ],
+  competencies: [
+    {
+      id: "C1.1", domain: "D1", track: "both", level: "Applying", validated: true, validatedBy: "Dealer group service managers, Feb 2026",
+      verb: "Execute",
+      object: "shop safety and hazardous materials handling procedures",
+      context: "in a working repair bay across lifting, chemical handling, waste disposal, and fire-risk operations",
+      criteria: "with zero safety violations observed across a full semester of shop time and correct handling documented for every regulated material encountered",
+      definition: "Baseline shop competence. Written as a sustained-observation competency because safety is a continuous behavior, not a one-time demonstration.",
+      ksabs: [
+        { id: "K1", type: "K", text: "OSHA shop requirements, SDS interpretation, and Kansas waste disposal rules" },
+        { id: "K2", type: "K", text: "Lift points, capacity ratings, and failure modes for common lift types" },
+        { id: "S1", type: "S", text: "Positions and raises a vehicle on a lift correctly for its construction type" },
+        { id: "S2", type: "S", text: "Handles, stores, and disposes of fluids, refrigerants, and batteries to regulation" },
+        { id: "B1", type: "B", text: "Wears required PPE without reminder, including on quick jobs" },
+        { id: "B2", type: "B", text: "Cleans and returns tools and controls fluid spills before leaving the bay" }
+      ],
+      assessment: {
+        evidence: "Process", mode: "Summative", authenticity: "Lab / Shop",
+        threshold: "Zero violations across 6 unannounced audits; all regulated materials logged correctly",
+        rubric: [
+          "Lift and vehicle support correct",
+          "PPE consistently used",
+          "Regulated material handling and documentation",
+          "Bay condition at end of task"
+        ],
+        covers: ["K1", "K2", "S1", "S2", "B1", "B2"]
+      },
+      activities: [
+        { id: "L1", title: "Shop safety induction and lift certification", modality: "Guided lab", hours: 8, targets: ["K2", "S1"] },
+        { id: "L2", title: "Hazmat and waste stream module", modality: "Self-paced digital", hours: 4, targets: ["K1", "S2"] }
+      ]
+    },
+    {
+      id: "C1.2", domain: "D1", track: "both", level: "Applying", validated: true, validatedBy: "Independent repair network owners, Jan 2026",
+      verb: "Produce",
+      object: "a complete repair order from customer concern through documented cause and correction",
+      context: "using the shop management system and OEM service information for a real or simulated customer vehicle",
+      criteria: "with the concern stated in the customer's words, the cause supported by test evidence, correction described specifically, and labor and parts traceable — accepted by a service advisor without rework on 8 of 10 orders",
+      definition: "The commercial artifact of the trade. Employers consistently name write-up quality as the gap between a technician who can fix a car and one the shop can bill for.",
+      ksabs: [
+        { id: "K1", type: "K", text: "Three C's structure and why each is legally and commercially necessary" },
+        { id: "K2", type: "K", text: "Labor time guides, warranty vs. customer-pay distinctions" },
+        { id: "S1", type: "S", text: "Navigates OEM service information to find procedures, TSBs, and specifications" },
+        { id: "S2", type: "S", text: "Writes cause and correction in language a service advisor can relay to a customer" },
+        { id: "A1", type: "A", text: "Translates a vague customer description into a testable, reproducible concern" },
+        { id: "B1", type: "B", text: "Documents test results as taken rather than reconstructing them at write-up" }
+      ],
+      assessment: {
+        evidence: "Product", mode: "Summative", authenticity: "Supervised Workplace",
+        threshold: "8 of 10 repair orders accepted without rework by an advisor or instructor acting as one",
+        rubric: [
+          "Concern captured accurately and reproducibly",
+          "Cause supported by documented evidence",
+          "Correction specific and complete",
+          "Parts and labor traceable"
+        ],
+        covers: ["K1", "K2", "S1", "S2", "A1", "B1"]
+      },
+      activities: [
+        { id: "L1", title: "Service information navigation drills", modality: "Guided lab", hours: 6, targets: ["S1"] },
+        { id: "L2", title: "Write-up clinic with a working service advisor", modality: "Employer-sited", hours: 6, targets: ["S2", "A1", "K2"] }
+      ]
+    },
+    {
+      id: "C1.3", domain: "D1", track: "ev", level: "Applying", validated: true, validatedBy: "Alternative-fuel fleet partners, Mar 2026",
+      verb: "De-energize",
+      object: "a high-voltage vehicle system and verify the absence of voltage",
+      context: "on a hybrid or battery-electric vehicle prior to any service that breaches the high-voltage envelope",
+      criteria: "following the OEM shutdown procedure in full sequence, verifying zero volts with a Category III rated meter at the OEM-specified points, and applying lockout — with zero procedural omissions on every attempt",
+      definition: "The gatekeeping competency for the electric track. Written to a zero-tolerance standard because the failure mode is fatal rather than costly.",
+      ksabs: [
+        { id: "K1", type: "K", text: "High-voltage hazards, arc flash, and the physiological effect of DC at pack voltages" },
+        { id: "K2", type: "K", text: "NFPA 70E boundaries and PPE category selection for EV service" },
+        { id: "K3", type: "K", text: "OEM service-disconnect locations and capacitor discharge intervals by platform" },
+        { id: "S1", type: "S", text: "Inspects and tests Class 0 gloves before every use" },
+        { id: "S2", type: "S", text: "Executes the OEM shutdown sequence and applies lockout/tagout" },
+        { id: "S3", type: "S", text: "Verifies zero voltage using a CAT III meter with a live-dead-live check" },
+        { id: "B1", type: "B", text: "Refuses to begin high-voltage work alone or without a rescue-aware second person present" }
+      ],
+      assessment: {
+        evidence: "Process", mode: "Summative", authenticity: "Lab / Shop",
+        threshold: "Zero omissions across 5 evaluated shutdowns on at least two different platforms; any omission of a verification step is an automatic non-pass",
+        rubric: [
+          "Glove inspection and PPE selection",
+          "OEM sequence followed completely and in order",
+          "Live-dead-live verification performed",
+          "Lockout applied and controlled"
+        ],
+        covers: ["K1", "K2", "K3", "S1", "S2", "S3", "B1"]
+      },
+      activities: [
+        { id: "L1", title: "High-voltage safety certification course", modality: "Didactic", hours: 12, targets: ["K1", "K2"] },
+        { id: "L2", title: "Platform-specific shutdown practicals across three vehicle types", modality: "Guided lab", hours: 16, targets: ["K3", "S2", "S3"] },
+        { id: "L3", title: "PPE care, inspection, and test-cycle lab", modality: "Guided lab", hours: 4, targets: ["S1", "B1"] }
+      ]
+    },
+    {
+      id: "C2.1", domain: "D2", track: "both", level: "Analyzing", validated: true, validatedBy: "Dealer group technical trainers, Feb 2026",
+      verb: "Diagnose",
+      object: "electrical circuit faults using measurement and wiring diagrams",
+      context: "on live vehicles with inserted faults, including voltage drop, parasitic draw, and intermittent conditions",
+      criteria: "isolating the fault to a specific component or wire segment in 8 of 10 cases with no parts replaced speculatively and total diagnostic time within 150% of the labor guide",
+      definition: "The shared electrical foundation for both tracks. The no-speculative-replacement and time criteria together define what a shop can actually afford to employ.",
+      ksabs: [
+        { id: "K1", type: "K", text: "Voltage drop theory and why resistance measurement misleads on loaded circuits" },
+        { id: "K2", type: "K", text: "Wiring diagram conventions, ground distribution, and circuit protection strategy" },
+        { id: "S1", type: "S", text: "Uses a DMM and a lab scope to capture live and intermittent signals" },
+        { id: "S2", type: "S", text: "Measures parasitic draw without waking modules" },
+        { id: "A1", type: "A", text: "Selects a test sequence that halves the candidate set with each measurement" },
+        { id: "B1", type: "B", text: "Verifies the repair by reproducing the original condition before closing the job" }
+      ],
+      assessment: {
+        evidence: "Performance", mode: "Summative", authenticity: "Lab / Shop",
+        threshold: "8 of 10 inserted faults isolated correctly with zero speculative part replacement",
+        rubric: [
+          "Fault correctly isolated",
+          "Test strategy efficient and justified",
+          "Instrument setup and interpretation correct",
+          "Repair verified against the original symptom"
+        ],
+        covers: ["K1", "K2", "S1", "S2", "A1", "B1"]
+      },
+      activities: [
+        { id: "L1", title: "Voltage drop and circuit theory lab", modality: "Guided lab", hours: 16, targets: ["K1", "S1"] },
+        { id: "L2", title: "Fault-inserted vehicle rotation", modality: "Guided lab", hours: 24, targets: ["A1", "S2", "B1"] },
+        { id: "L3", title: "Lab scope waveform interpretation module", modality: "Self-paced digital", hours: 8, targets: ["S1", "K2"] }
+      ]
+    },
+    {
+      id: "C2.2", domain: "D2", track: "both", level: "Analyzing", validated: true, validatedBy: "Dealer group technical trainers, Feb 2026",
+      verb: "Diagnose",
+      object: "module communication and network faults",
+      context: "on CAN and LIN equipped vehicles presenting U-codes, lost communication, or intermittent module dropout",
+      criteria: "identifying the failed node, terminator, or bus segment in 7 of 9 cases using scope-captured bus waveforms as supporting evidence",
+      definition: "Network diagnosis is the competency that most sharply separates current from legacy technicians, and it is identical in requirement across both tracks.",
+      ksabs: [
+        { id: "K1", type: "K", text: "CAN high/low signalling, termination resistance, and bus topology" },
+        { id: "K2", type: "K", text: "U-code families and what each implies about the failure location" },
+        { id: "S1", type: "S", text: "Captures and interprets bus waveforms on a lab scope" },
+        { id: "S2", type: "S", text: "Performs bus resistance and isolation testing safely" },
+        { id: "A1", type: "A", text: "Distinguishes a failed module from a wiring fault that mimics one" },
+        { id: "B1", type: "B", text: "Checks for applicable TSBs and reprogramming requirements before condemning a module" }
+      ],
+      assessment: {
+        evidence: "Performance", mode: "Summative", authenticity: "Lab / Shop",
+        threshold: "7 of 9 network faults isolated with waveform evidence attached to each write-up",
+        rubric: [
+          "Correct node or segment identified",
+          "Waveform capture quality and interpretation",
+          "Isolation testing performed safely",
+          "TSB and calibration check documented"
+        ],
+        covers: ["K1", "K2", "S1", "S2", "A1", "B1"]
+      },
+      activities: [
+        { id: "L1", title: "Vehicle network architecture seminar", modality: "Didactic", hours: 8, targets: ["K1", "K2"] },
+        { id: "L2", title: "Bus fault insertion lab with scope capture requirement", modality: "Guided lab", hours: 18, targets: ["S1", "S2", "A1"] }
+      ]
+    },
+    {
+      id: "C2.3", domain: "D2", track: "ev", level: "Evaluating", validated: true, validatedBy: "Utility fleet maintenance partner, Mar 2026",
+      verb: "Evaluate",
+      object: "high-voltage battery pack health and isolation integrity",
+      context: "on a de-energized hybrid or EV pack using OEM scan data, insulation resistance testing, and cell-level module data",
+      criteria: "correctly determining pack serviceability, identifying the specific failed module where present, and documenting isolation resistance against OEM limits in 6 of 7 assessed packs",
+      definition: "The highest-value diagnostic competency in the electric track — the difference between a module replacement and an unnecessary pack replacement is often five figures.",
+      ksabs: [
+        { id: "K1", type: "K", text: "Lithium chemistry, cell balancing, state of health vs. state of charge" },
+        { id: "K2", type: "K", text: "Isolation fault causes and OEM insulation resistance limits" },
+        { id: "S1", type: "S", text: "Performs insulation resistance testing with an appropriate megohmmeter" },
+        { id: "S2", type: "S", text: "Extracts and interprets cell-level voltage and temperature data from OEM tooling" },
+        { id: "S3", type: "S", text: "Handles, transports, and stores a removed pack or module to regulation" },
+        { id: "A1", type: "A", text: "Determines whether a fault is cell, module, contactor, or BMS in origin" },
+        { id: "B1", type: "B", text: "Treats every pack as energized until personally verified otherwise" }
+      ],
+      assessment: {
+        evidence: "Performance", mode: "Summative", authenticity: "Lab / Shop",
+        threshold: "6 of 7 packs correctly evaluated; C1.3 must be signed off before attempting",
+        rubric: [
+          "Serviceability determination correct",
+          "Failed component correctly localized",
+          "Isolation testing performed and documented",
+          "Handling, storage, and transport compliance"
+        ],
+        covers: ["K1", "K2", "S1", "S2", "S3", "A1", "B1"]
+      },
+      activities: [
+        { id: "L1", title: "Battery chemistry and BMS architecture module", modality: "Didactic", hours: 10, targets: ["K1", "K2"] },
+        { id: "L2", title: "Pack teardown, module swap, and isolation testing lab", modality: "Guided lab", hours: 24, targets: ["S1", "S2", "S3", "A1"] },
+        { id: "L3", title: "Fleet partner rotation on in-service EV packs", modality: "Employer-sited", hours: 20, targets: ["A1", "B1"] }
+      ]
+    },
+    {
+      id: "C3.1", domain: "D3", track: "ice", level: "Analyzing", validated: true, validatedBy: "Independent repair network owners, Jan 2026",
+      verb: "Diagnose",
+      object: "engine performance and driveability faults",
+      context: "on a running vehicle using scan data, fuel trim analysis, scope-captured sensor signals, and mechanical testing",
+      criteria: "identifying root cause in 8 of 10 inserted faults with supporting data captured, and distinguishing a genuine cause from a downstream symptom in every case",
+      definition: "The core combustion-track diagnostic competency. The symptom-vs-cause requirement is what the criteria exist to enforce.",
+      ksabs: [
+        { id: "K1", type: "K", text: "Fuel trim interpretation and what each pattern implies about the fault domain" },
+        { id: "K2", type: "K", text: "Volumetric efficiency, valve timing, and mechanical contribution to driveability faults" },
+        { id: "S1", type: "S", text: "Captures and interprets sensor and injector waveforms" },
+        { id: "S2", type: "S", text: "Performs relative compression, running compression, and vacuum testing" },
+        { id: "A1", type: "A", text: "Separates a cause from a code — recognizes when the DTC names a symptom" },
+        { id: "B1", type: "B", text: "Reproduces the customer's condition before and after repair" }
+      ],
+      assessment: {
+        evidence: "Performance", mode: "Summative", authenticity: "Lab / Shop",
+        threshold: "8 of 10 root causes identified with data evidence; any parts-cannon approach is an automatic non-pass",
+        rubric: [
+          "Root cause correct",
+          "Data captured supports the conclusion",
+          "Mechanical vs. control-system reasoning sound",
+          "Verification of repair"
+        ],
+        covers: ["K1", "K2", "S1", "S2", "A1", "B1"]
+      },
+      activities: [
+        { id: "L1", title: "Fuel trim and driveability diagnosis seminar", modality: "Didactic", hours: 12, targets: ["K1", "A1"] },
+        { id: "L2", title: "Fault-inserted driveability rotation", modality: "Guided lab", hours: 30, targets: ["S1", "S2", "B1"] },
+        { id: "L3", title: "Engine mechanical testing lab", modality: "Guided lab", hours: 12, targets: ["K2", "S2"] }
+      ]
+    },
+    {
+      id: "C3.2", domain: "D3", track: "ice", level: "Applying", validated: true, validatedBy: "Program advisory committee, Jan 2026",
+      verb: "Service",
+      object: "fuel delivery and ignition systems",
+      context: "on gasoline direct-injection and port-injection vehicles per OEM procedure",
+      criteria: "restoring specified fuel pressure, injector balance, and secondary ignition performance with post-repair data within OEM specification on all assessed vehicles",
+      definition: "Repair execution paired with verification. The criteria are stated as measured outcomes rather than tasks completed.",
+      ksabs: [
+        { id: "K1", type: "K", text: "GDI vs. PFI operating pressures, injector control, and carbon accumulation behavior" },
+        { id: "K2", type: "K", text: "Secondary ignition waveform interpretation" },
+        { id: "S1", type: "S", text: "Tests and services high-pressure fuel components safely" },
+        { id: "S2", type: "S", text: "Performs injector balance and cylinder contribution testing" },
+        { id: "A1", type: "A", text: "Decides between cleaning, replacement, and further diagnosis based on measured data" },
+        { id: "B1", type: "B", text: "Depressurizes and controls fuel spill risk without being reminded" }
+      ],
+      assessment: {
+        evidence: "Performance", mode: "Summative", authenticity: "Lab / Shop",
+        threshold: "All assessed vehicles returned with post-repair data within OEM specification",
+        rubric: [
+          "Pre-repair testing complete",
+          "Service performed to OEM procedure",
+          "Post-repair data within specification",
+          "Fuel safety practice"
+        ],
+        covers: ["K1", "K2", "S1", "S2", "A1", "B1"]
+      },
+      activities: [
+        { id: "L1", title: "Fuel and ignition systems lab", modality: "Guided lab", hours: 20, targets: ["S1", "S2", "K1"] },
+        { id: "L2", title: "Secondary ignition waveform module", modality: "Self-paced digital", hours: 6, targets: ["K2"] }
+      ]
+    },
+    {
+      id: "C3.3", domain: "D3", track: "ev", level: "Analyzing", validated: true, validatedBy: "Alternative-fuel fleet partners, Mar 2026",
+      verb: "Diagnose",
+      object: "electric drive unit and regenerative braking faults",
+      context: "on hybrid and battery-electric vehicles using OEM scan tooling, torque and speed data, and thermal data",
+      criteria: "correctly identifying the failed subsystem — motor, inverter, resolver, reduction gear, or control strategy — in 6 of 8 inserted faults with supporting data",
+      definition: "The powertrain counterpart to engine performance diagnosis for the electric track, including the regen-to-friction blending behavior that produces most customer complaints.",
+      ksabs: [
+        { id: "K1", type: "K", text: "AC motor types, inverter function, and resolver/position sensing" },
+        { id: "K2", type: "K", text: "Regenerative braking blending strategy and its interaction with the friction system" },
+        { id: "S1", type: "S", text: "Interprets torque request, actual torque, and thermal derate data" },
+        { id: "S2", type: "S", text: "Tests motor windings and resolver circuits per OEM procedure on a de-energized system" },
+        { id: "A1", type: "A", text: "Distinguishes a mechanical drive unit fault from a control or thermal-management fault" },
+        { id: "B1", type: "B", text: "Confirms high-voltage isolation before every drive unit intervention" }
+      ],
+      assessment: {
+        evidence: "Performance", mode: "Summative", authenticity: "Lab / Shop",
+        threshold: "6 of 8 faults correctly localized with supporting data captured",
+        rubric: [
+          "Subsystem correctly identified",
+          "Data interpretation sound",
+          "Testing performed safely on de-energized systems",
+          "Regen vs. friction reasoning correct"
+        ],
+        covers: ["K1", "K2", "S1", "S2", "A1", "B1"]
+      },
+      activities: [
+        { id: "L1", title: "Electric drive unit theory and teardown", modality: "Guided lab", hours: 20, targets: ["K1", "S2"] },
+        { id: "L2", title: "Regen blending diagnosis lab", modality: "Guided lab", hours: 14, targets: ["K2", "S1", "A1"] }
+      ]
+    },
+    {
+      id: "C4.1", domain: "D4", track: "both", level: "Applying", validated: true, validatedBy: "Dealer group service managers, Feb 2026",
+      verb: "Service",
+      object: "hydraulic and electronically controlled brake systems",
+      context: "on vehicles with ABS, stability control, and — on the electric track — regenerative braking integration",
+      criteria: "restoring braking performance to OEM specification with correct bleed procedure, no post-service warning lamps, and lateral pull within specification on road test for every assessed vehicle",
+      definition: "A shared competency where the electric track adds a genuine diagnostic difference: friction components wear differently and regen masks developing faults.",
+      ksabs: [
+        { id: "K1", type: "K", text: "Hydraulic brake theory, ABS operation, and electronic brake distribution" },
+        { id: "K2", type: "K", text: "Why regenerative systems produce distinct wear, corrosion, and complaint patterns" },
+        { id: "S1", type: "S", text: "Measures rotors and drums and services friction components to specification" },
+        { id: "S2", type: "S", text: "Performs scan-tool-assisted bleed on ABS and electronic brake modules" },
+        { id: "A1", type: "A", text: "Diagnoses a pull, pulsation, or noise complaint to its actual cause" },
+        { id: "B1", type: "B", text: "Road tests every brake repair before returning the vehicle" }
+      ],
+      assessment: {
+        evidence: "Performance", mode: "Summative", authenticity: "Lab / Shop",
+        threshold: "All assessed vehicles meet specification with a documented road test and no active codes",
+        rubric: [
+          "Measurement and component service to specification",
+          "Bleed procedure correct for the system type",
+          "Complaint resolved and verified",
+          "Road test documented"
+        ],
+        covers: ["K1", "K2", "S1", "S2", "A1", "B1"]
+      },
+      activities: [
+        { id: "L1", title: "Brake systems lab — hydraulic and electronic", modality: "Guided lab", hours: 20, targets: ["S1", "S2", "K1"] },
+        { id: "L2", title: "Regen wear pattern case study set", modality: "Self-paced digital", hours: 4, targets: ["K2"] }
+      ]
+    },
+    {
+      id: "C4.2", domain: "D4", track: "both", level: "Analyzing", validated: false, validatedBy: "",
+      verb: "Diagnose",
+      object: "steering and suspension faults affecting handling, noise, and tire wear",
+      context: "on a lift and on road test using alignment equipment and inspection technique",
+      criteria: "identifying the causal component in 7 of 9 cases and predicting the tire wear pattern each fault would produce",
+      definition: "Chassis diagnosis with a prediction requirement — the learner must explain the mechanism, not just name the worn part.",
+      ksabs: [
+        { id: "K1", type: "K", text: "Alignment angles and the wear and handling signature of each" },
+        { id: "K2", type: "K", text: "Suspension geometry and the effect of ride height and load" },
+        { id: "S1", type: "S", text: "Performs a four-wheel alignment and interprets the readout" },
+        { id: "S2", type: "S", text: "Inspects and load-tests steering and suspension components" },
+        { id: "A1", type: "A", text: "Connects a specific wear pattern back to its causal geometry error" },
+        { id: "B1", type: "B", text: "Road tests to confirm the complaint before disassembling anything" }
+      ],
+      assessment: {
+        evidence: "Performance", mode: "Summative", authenticity: "Lab / Shop",
+        threshold: "7 of 9 faults correctly identified with wear-pattern prediction stated",
+        rubric: [
+          "Causal component identified",
+          "Wear pattern prediction correct",
+          "Alignment performed and interpreted correctly"
+        ],
+        covers: ["K1", "S1", "S2", "A1"]
+      },
+      activities: [
+        { id: "L1", title: "Alignment and geometry lab", modality: "Guided lab", hours: 16, targets: ["K1", "S1"] },
+        { id: "L2", title: "Chassis inspection rotation", modality: "Guided lab", hours: 12, targets: ["S2", "A1"] }
+      ]
+    },
+    {
+      id: "C5.1", domain: "D5", track: "both", level: "Evaluating", validated: true, validatedBy: "Joint employer panel, Mar 2026",
+      verb: "Apply",
+      object: "a structured diagnostic strategy from concern to verified repair",
+      context: "on unfamiliar vehicles and unfamiliar faults across both powertrain types, under a labor-time constraint",
+      criteria: "reaching a correct diagnosis within 150% of guide time on 8 of 10 unfamiliar faults, with a written test plan produced before testing begins",
+      definition: "The transferable core of the trade — the ability to diagnose something never seen before. Deliberately assessed on unfamiliar faults, because a competency demonstrated only on rehearsed problems is a task.",
+      ksabs: [
+        { id: "K1", type: "K", text: "Structured diagnostic methodologies and where each is appropriate" },
+        { id: "K2", type: "K", text: "How to use OEM diagnostic trees without being trapped by them" },
+        { id: "S1", type: "S", text: "Writes a test plan that names the hypothesis, the test, and the decision each result triggers" },
+        { id: "A1", type: "A", text: "Diagnoses systems for which no formal instruction was received" },
+        { id: "A2", type: "A", text: "Knows when to stop and escalate rather than continuing to spend labor time" },
+        { id: "B1", type: "B", text: "Documents dead ends as well as successful paths for the next technician" }
+      ],
+      assessment: {
+        evidence: "Performance", mode: "Summative", authenticity: "Independent Workplace",
+        threshold: "8 of 10 unfamiliar faults correctly diagnosed within time; written test plan required for each",
+        rubric: [
+          "Test plan produced before testing",
+          "Diagnosis correct",
+          "Time discipline",
+          "Escalation judgment"
+        ],
+        covers: ["K1", "K2", "S1", "A1", "A2", "B1"]
+      },
+      activities: [
+        { id: "L1", title: "Capstone diagnostic block on unfamiliar vehicles", modality: "Guided lab", hours: 40, targets: ["A1", "S1", "A2"] },
+        { id: "L2", title: "Employer-sited diagnostic internship", modality: "Employer-sited", hours: 120, targets: ["A1", "A2", "B1"] }
+      ]
+    },
+    {
+      id: "C5.2", domain: "D5", track: "both", level: "Applying", validated: true, validatedBy: "Joint employer panel, Mar 2026",
+      verb: "Maintain",
+      object: "professional conduct and current technical knowledge",
+      context: "across shop assignments, employer rotations, and independent study over the length of the program",
+      criteria: "with attendance and punctuality at employer standard, all committed jobs completed or formally handed off, and a documented record of self-directed learning on at least three systems not covered in class",
+      definition: "The behavior cluster employers name first. Assessed longitudinally rather than in a single event, because that is the only way it can be observed honestly.",
+      ksabs: [
+        { id: "K1", type: "K", text: "Certification pathways, OEM training routes, and the economics of specialization" },
+        { id: "S1", type: "S", text: "Locates and evaluates credible technical information independently" },
+        { id: "A1", type: "A", text: "Learns an unfamiliar system well enough to work on it safely from published data alone" },
+        { id: "B1", type: "B", text: "Arrives ready and on time; communicates in advance when unable to" },
+        { id: "B2", type: "B", text: "Hands off incomplete work with a written status rather than leaving it" },
+        { id: "B3", type: "B", text: "Accepts correction and applies it in the next job without repetition of the error" }
+      ],
+      assessment: {
+        evidence: "Portfolio", mode: "Summative", authenticity: "Supervised Workplace",
+        threshold: "Employer or instructor attestation on all behavior rows plus three documented self-directed learning artifacts",
+        rubric: [
+          "Attendance and reliability at employer standard",
+          "Handoff quality on incomplete work",
+          "Response to correction over time",
+          "Self-directed learning evidence"
+        ],
+        covers: ["K1", "S1", "B1", "B2", "B3"]
+      },
+      activities: [
+        { id: "L1", title: "Career pathways and certification planning", modality: "Didactic", hours: 4, targets: ["K1"] },
+        { id: "L2", title: "Self-directed system study with presentation to peers", modality: "Peer / team", hours: 12, targets: ["S1", "A1"] },
+        { id: "L3", title: "Employer rotation with structured supervisor feedback", modality: "Employer-sited", hours: 80, targets: ["B1", "B2", "B3"] }
+      ]
+    }
+  ]
+}
+};
+
+/* ============================================================ STATE */
+const VAGUE = ["understand","know","learn","appreciate","be familiar","comprehend","be aware","grasp","study","review","become","gain","have knowledge"];
+const clone = o => JSON.parse(JSON.stringify(o));
+
+const state = {
+  disc: "rn",
+  track: "ice",
+  view: "build",
+  sel: { type: "comp", id: "C1.1" },
+  data: {},
+  dirty: false
+};
+
+/* ---- persistence (falls back to memory if storage is unavailable) ---- */
+const KEY = d => "cba:v2:" + d;
+let saveTimer = null;
+
+async function load(disc){
+  try{
+    const r = await window.storage.get(KEY(disc));
+    if (r && r.value) return JSON.parse(r.value);
+  }catch(e){ /* no saved copy */ }
+  return clone(SEED[disc]);
+}
+function scheduleSave(){
+  state.dirty = true; paintSaved("Saving…");
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async ()=>{
+    try{
+      await window.storage.set(KEY(state.disc), JSON.stringify(state.data));
+      state.dirty = false; paintSaved("Saved");
+    }catch(e){ paintSaved("Session only"); }
+  }, 700);
+}
+function paintSaved(t){ document.querySelectorAll(".saved").forEach(n=>n.textContent = t); }
+
+/* ---- derived ---- */
+const D = () => state.data;
+function comps(){
+  const t = D().tracks ? state.track : null;
+  return D().competencies.filter(c => !t || !c.track || c.track === "both" || c.track === t);
+}
+function compsIn(domId){ return comps().filter(c => c.domain === domId); }
+function domains(){ return D().domains.filter(d => compsIn(d.id).length > 0 || !D().tracks); }
+function findComp(id){ return D().competencies.find(c => c.id === id); }
+function findDom(id){ return D().domains.find(d => d.id === id); }
+function selComp(){ return state.sel.type === "comp" ? findComp(state.sel.id) : null; }
+function nextId(list, prefix){
+  let n = 1; const ids = new Set(list.map(x=>x.id));
+  while (ids.has(prefix + n)) n++;
+  return prefix + n;
+}
+const esc = s => String(s==null?"":s).replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+
+/* ============================================================ QUALITY */
+function audit(){
+  const out = [];
+  const push = (sev, cben, loc, locId, msg, why) => out.push({sev, cben, loc, locId, msg, why});
+  const cs = comps();
+
+  for (const d of domains()){
+    const n = compsIn(d.id).length;
+    if (n < 2) push("info", 3, d.id, d.id, `Domain "${d.title}" holds ${n} competenc${n===1?"y":"ies"}.`,
+      "A domain with a single competency is usually a competency in disguise, or a domain that has not been fully mapped yet.");
+    if (!d.cben || !d.cben.length) push("info", 3, d.id, d.id, `Domain "${d.title}" is not tagged to a C-BEN element.`, "");
+    const authentic = compsIn(d.id).some(c => ["Supervised Workplace","Independent Workplace"].includes(c.assessment.authenticity));
+    if (n && !authentic) push("warn", 4, d.id, d.id, `No competency in "${d.title}" is assessed in a real workplace setting.`,
+      "Element 4 expects authentic assessment. Simulation and lab evidence alone leaves mastery unverified in the setting the credential claims to prepare for.");
+  }
+
+  for (const c of cs){
+    const v = (c.verb||"").toLowerCase().trim();
+    if (!v) push("error", 2, c.id, c.id, "Competency has no action verb.", "");
+    else if (VAGUE.some(x => v.startsWith(x)))
+      push("error", 2, c.id, c.id, `Verb "${c.verb}" is not observable.`,
+        "Element 2 requires competencies that can be reliably and validly assessed. An unobservable verb cannot anchor a rubric — replace it with the action an assessor would actually watch.");
+    if (!(c.context||"").trim()) push("error", 2, c.id, c.id, "Competency statement has no context or condition.",
+      "Without a stated context, the same statement can be satisfied in a classroom or on a live aircraft. Context sets the difficulty.");
+    if (!(c.criteria||"").trim()) push("error", 2, c.id, c.id, "Competency statement has no performance criteria.",
+      "Criteria are the difference between an outcome and a competency — they state how well, how often, and how independently.");
+    else if (!/\d|%|\ball\b|\bevery\b|\bzero\b|\bno\b|\bnone\b|\beach\b|at least|within|without|unprompted|independent|consecutive|minimum|\bone\b|\btwo\b|\bthree\b|\bfour\b|\bfive\b|\bsix\b|\bseven\b|\beight\b|\bnine\b|\bten\b/i.test(c.criteria))
+      push("warn", 2, c.id, c.id, "Performance criteria may not be measurable.",
+        "Criteria that contain no quantity, frequency, tolerance, or independence condition are hard to score consistently across assessors.");
+    if (!(c.definition||"").trim()) push("warn", 7, c.id, c.id, "Competency has no definition for learners.",
+      "Element 7 turns on learners being able to read and understand what mastery means before they attempt it.");
+    if (!c.validated) push("warn", 6, c.id, c.id, "Not validated by an external partner.",
+      "Element 6 expects employers and professional bodies to validate competencies, not merely advise on them.");
+
+    const ks = c.ksabs || [];
+    if (!ks.length) push("error", 2, c.id, c.id, "Competency has no KSABs.", "");
+    const types = new Set(ks.map(k=>k.type));
+    if (ks.length && !types.has("B")) push("warn", 2, c.id, c.id, "No behavior (B) component.",
+      "Element 2 asks for integrated competencies. A competency built only from knowledge and skill omits the professional conduct employers report as the most common gap.");
+    if (ks.length && !types.has("A")) push("info", 2, c.id, c.id, "No ability (A) component — no stated transfer.",
+      "Ability is where a skill becomes usable in an unrehearsed situation. Without one, the competency may only be assessable on rehearsed tasks.");
+
+    const covered = new Set(c.assessment.covers || []);
+    const targeted = new Set((c.activities||[]).flatMap(a => a.targets || []));
+    for (const k of ks){
+      if (!covered.has(k.id)) push("error", 4, c.id + " " + k.id, c.id, `${k.id} is never assessed.`,
+        "Element 4 requires the assessment strategy to cover the competency. An unassessed KSAB is a claim the credential cannot support.");
+      if (!targeted.has(k.id)) push("warn", 3, c.id + " " + k.id, c.id, `${k.id} has no learning activity.`,
+        "Element 3 expects every competency to connect to content and activities designed to develop it. An unsupported KSAB asks learners to arrive already competent.");
+    }
+    for (const id of covered) if (!ks.some(k=>k.id===id))
+      push("info", 4, c.id, c.id, `Assessment references ${id}, which no longer exists.`, "");
+
+    const a = c.assessment;
+    if (!a.rubric || a.rubric.length < 2) push("warn", 4, c.id, c.id, "Rubric has fewer than two criteria.",
+      "A single-row rubric collapses to pass/fail and gives learners nothing to act on when they do not pass.");
+    if (!(a.threshold||"").trim()) push("error", 4, c.id, c.id, "No mastery threshold defined.",
+      "Mastery has to be stated as a standard, not left to assessor judgement, or the same performance passes with one instructor and fails with another.");
+    if (a.mode === "Formative") push("warn", 4, c.id, c.id, "Only formative evidence — no summative validation.",
+      "Formative assessment informs the learning journey; something has to validate mastery before the credential is awarded.");
+    if (!(c.activities||[]).length) push("error", 3, c.id, c.id, "Competency has no learning activities.", "");
+  }
+
+  const all = cs.flatMap(c=>c.ksabs||[]);
+  if (all.length){
+    for (const t of ["K","S","A","B"]){
+      const pct = all.filter(k=>k.type===t).length / all.length;
+      if (pct < 0.08) push("info", 2, "PROGRAM", null,
+        `${KTYPE[t].label} makes up ${Math.round(pct*100)}% of all KSABs across the program.`,
+        "A framework weighted heavily toward one type usually reflects how it was written rather than what the occupation requires.");
+    }
+  }
+  const order = {error:0, warn:1, info:2};
+  out.sort((a,b)=> order[a.sev]-order[b.sev] || a.cben-b.cben || String(a.loc).localeCompare(String(b.loc)));
+  return out;
+}
+
+/* ============================================================ SHELL */
+function renderChrome(){
+  const seg = document.getElementById("discSeg");
+  seg.innerHTML = Object.keys(SEED).map(k =>
+    `<button data-disc="${k}" aria-pressed="${state.disc===k}">${esc(SEED[k].name)}</button>`).join("");
+  seg.querySelectorAll("button").forEach(b => b.onclick = () => switchDisc(b.dataset.disc));
+
+  const tw = document.getElementById("trackWrap");
+  if (D().tracks){
+    tw.hidden = false;
+    const ts = document.getElementById("trackSeg");
+    ts.innerHTML = D().tracks.map(t =>
+      `<button data-track="${t.id}" aria-pressed="${state.track===t.id}">${esc(t.label)}</button>`).join("");
+    ts.querySelectorAll("button").forEach(b => b.onclick = () => {
+      state.track = b.dataset.track;
+      if (!comps().some(c=>c.id===state.sel.id)) state.sel = {type:"comp", id: comps()[0]?.id};
+      renderAll();
+    });
+  } else tw.hidden = true;
+
+  const d = D();
+  document.getElementById("band").innerHTML = `
+    <div>
+      <h2>${esc(d.program)}</h2>
+      <div class="cred">${esc(d.credential)}</div>
+      <div class="site">${esc(d.site)}</div>
+    </div>
+    <div>
+      <div class="meta-h">External frameworks</div>
+      <div class="meta-l">${d.frames.map(f=>`<span>${esc(f)}</span>`).join("")}</div>
+    </div>
+    <div>
+      <div class="meta-h">Validating partners</div>
+      <div class="meta-l">${d.partners.map(f=>`<span>${esc(f)}</span>`).join("")}</div>
+    </div>
+    <div>
+      <div class="meta-h">Framework scope</div>
+      <div class="meta-l">
+        <span>${domains().length} domains · ${comps().length} competencies</span>
+        <span>${comps().reduce((n,c)=>n+(c.ksabs||[]).length,0)} KSABs · ${comps().reduce((n,c)=>n+(c.activities||[]).length,0)} activities</span>
+        <span class="saved" style="margin-top:6px">Saved</span>
+      </div>
+    </div>`;
+}
+
+function renderTabs(){
+  const flags = audit().filter(f=>f.sev==="error").length;
+  const t = [["build","Build"],["trace","Alignment trace"],["quality","Quality check"],["export","Export"]];
+  const el = document.getElementById("tabs");
+  el.innerHTML = t.map(([k,l]) =>
+    `<button data-v="${k}" aria-pressed="${state.view===k}">${l}${
+      k==="quality" ? `<span class="count${flags?" flag":""}">${flags}</span>` : ""}</button>`).join("");
+  el.querySelectorAll("button").forEach(b => b.onclick = () => { state.view = b.dataset.v; renderTabs(); renderMain(); window.scrollTo({top:0}); });
+}
+
+function renderAll(){ renderChrome(); renderTabs(); renderMain(); }
+function renderMain(){
+  const m = document.getElementById("main");
+  if (state.view === "build") renderBuild(m);
+  else if (state.view === "trace") renderTrace(m);
+  else if (state.view === "quality") renderQuality(m);
+  else renderExport(m);
+}
+
+async function switchDisc(k){
+  clearTimeout(saveTimer);
+  if (state.dirty){ try{ await window.storage.set(KEY(state.disc), JSON.stringify(state.data)); }catch(e){} state.dirty=false; }
+  state.disc = k;
+  state.data = await load(k);
+  state.track = D().tracks ? D().tracks[0].id : "ice";
+  state.sel = { type:"comp", id: comps()[0]?.id };
+  renderAll();
+}
+
+/* ============================================================ BUILD */
+function renderBuild(root){
+  root.innerHTML = `<div class="build"><aside class="tree" id="tree"></aside><div class="panel" id="panel"></div></div>`;
+  renderTree(); renderPanel();
+}
+
+function renderTree(){
+  const errs = {};
+  audit().filter(f=>f.sev==="error").forEach(f => { if (f.locId) errs[f.locId] = true; });
+  const html = domains().map(d => {
+    const on = state.sel.type==="dom" && state.sel.id===d.id;
+    return `<div class="dom">
+      <button class="dom-btn${on?" on":""}" data-dom="${d.id}">
+        <span class="id">${d.id}</span><span class="nm">${esc(d.title)}</span>
+      </button>
+      ${compsIn(d.id).map(c => `
+        <button class="comp-btn${state.sel.type==="comp"&&state.sel.id===c.id?" on":""}" data-comp="${c.id}">
+          <span class="id">${c.id}</span>
+          <span class="nm${(c.verb||c.object)?"":" untitled"}">${esc(compLabel(c))}</span>
+          ${errs[c.id]?'<span class="dot" title="Quality check errors"></span>':""}
+        </button>`).join("")}
+      <button class="comp-add" data-addcomp="${d.id}" title="Add a competency to ${esc(d.title)}">+ Competency</button>
+    </div>`;
+  }).join("");
+
+  document.getElementById("tree").innerHTML = `
+    <div class="tree-h"><span class="t">Framework</span><span class="t">${comps().length} comp.</span></div>
+    ${html}
+    <button class="tree-add" data-add="dom">+ Add domain</button>`;
+
+  const t = document.getElementById("tree");
+  t.querySelectorAll("[data-dom]").forEach(b => b.onclick = () => { state.sel={type:"dom",id:b.dataset.dom}; renderTree(); renderPanel(); });
+  t.querySelectorAll("[data-comp]").forEach(b => b.onclick = () => { state.sel={type:"comp",id:b.dataset.comp}; renderTree(); renderPanel(); });
+  t.querySelectorAll("[data-addcomp]").forEach(b => b.onclick = () => addCompetency(b.dataset.addcomp));
+  t.querySelector("[data-add=dom]").onclick = () => {
+    const d = { id: nextId(D().domains,"D"), title:"New domain", rationale:"", cben:[2] };
+    D().domains.push(d); state.sel={type:"dom",id:d.id}; scheduleSave(); renderChrome(); renderTree(); renderPanel();
+  };
+}
+
+function renameCompetency(c, raw){
+  const id = String(raw).trim().replace(/\s+/g,"");
+  if (!id) return { ok:false, msg:"An identifier can't be blank." };
+  if (id === c.id) return { ok:true };
+  if (!/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(id))
+    return { ok:false, msg:"Use letters, digits, dots, dashes or underscores — no spaces." };
+  if (D().competencies.some(x => x.id === id))
+    return { ok:false, msg:`${id} is already used by another competency.` };
+  c.id = id; state.sel = { type:"comp", id };
+  return { ok:true };
+}
+
+function moveCompetency(c, dir){
+  const sibs = compsIn(c.domain);
+  const i = sibs.indexOf(c), j = i + dir;
+  if (i < 0 || j < 0 || j >= sibs.length) return;
+  const all = D().competencies;
+  const a = all.indexOf(c), b = all.indexOf(sibs[j]);
+  all[a] = sibs[j]; all[b] = c;
+  scheduleSave(); renderTree(); renderPanel();
+}
+
+function reassignCompetency(c, domId){
+  if (domId === c.domain) return;
+  const all = D().competencies;
+  all.splice(all.indexOf(c), 1);
+  c.domain = domId;
+  const sibs = all.filter(x => x.domain === domId);
+  const at = sibs.length ? all.indexOf(sibs[sibs.length-1]) + 1 : all.length;
+  all.splice(at, 0, c);
+  scheduleSave(); renderChrome(); renderTree(); renderPanel();
+}
+
+function duplicateCompetency(c){
+  const copy = clone(c);
+  let n = 2, id = c.id + "-copy";
+  while (D().competencies.some(x => x.id === id)) id = c.id + "-copy" + (n++);
+  copy.id = id;
+  copy.validated = false; copy.validatedBy = "";
+  const all = D().competencies;
+  all.splice(all.indexOf(c) + 1, 0, copy);
+  state.sel = { type:"comp", id };
+  scheduleSave(); renderChrome(); renderTree(); renderPanel();
+  document.getElementById("sId")?.select();
+}
+
+function addCompetency(domId){
+  const dom = findDom(domId); if (!dom) return;
+  const n = D().competencies.filter(x => x.domain === domId).length + 1;
+  let id = domId.replace("D","C") + "." + n;
+  let k = n; while (D().competencies.some(x => x.id === id)) id = domId.replace("D","C") + "." + (++k);
+  const c = {
+    id, domain: domId,
+    track: D().tracks ? (state.track || "both") : null,
+    level: "Applying", validated: false, validatedBy: "",
+    verb: "", object: "", context: "", criteria: "", definition: "",
+    ksabs: [],
+    assessment: { evidence:"Performance", mode:"Summative", authenticity:"Lab / Shop", threshold:"", rubric:[], covers:[] },
+    activities: []
+  };
+  D().competencies.push(c);
+  state.sel = { type:"comp", id: c.id };
+  scheduleSave(); renderChrome(); renderTree(); renderPanel();
+  document.getElementById("sVerb")?.focus();
+}
+
+const cbenTag = n => `<span class="cben-tag" title="${esc(CBEN[n])}">C-BEN ${n}</span>`;
+function flashError(el, msg){
+  const prev = el.parentElement.querySelector(".ferr");
+  if (prev) prev.remove();
+  const n = document.createElement("span");
+  n.className = "ferr"; n.textContent = msg; n.setAttribute("role","status");
+  el.parentElement.appendChild(n);
+  el.classList.add("bad");
+  setTimeout(() => { n.remove(); el.classList.remove("bad"); }, 3600);
+}
+
+const compLabel = c => (c.verb || c.object) ? `${c.verb} ${c.object}`.trim() : "Untitled competency";
+const opts = (arr, v) => arr.map(o=>`<option${o===v?" selected":""}>${esc(o)}</option>`).join("");
+
+function renderPanel(){
+  const p = document.getElementById("panel");
+  if (state.sel.type === "dom") return renderDomPanel(p);
+  const c = selComp();
+  if (!c){ p.innerHTML = `<div class="card"><div class="empty"><strong>Nothing selected</strong>Pick a competency from the framework, or add one.</div></div>`; return; }
+
+  p.innerHTML = statementCard(c) + ksabCard(c) + assessCard(c) + activityCard(c);
+  wireStatement(c); wireKsab(c); wireAssess(c); wireActivity(c);
+}
+
+function renderDomPanel(p){
+  const d = findDom(state.sel.id);
+  p.innerHTML = `
+  <section class="card">
+    <div class="card-h"><span class="bar"></span><h3>Domain of learning</h3><span class="sub">${d.id} · ${compsIn(d.id).length} competencies</span></div>
+    <div class="card-b">
+      <label class="f" style="margin-bottom:14px"><span class="lh">Title</span>
+        <input type="text" id="dTitle" value="${esc(d.title)}"></label>
+      <label class="f" style="margin-bottom:14px"><span class="lh">Rationale — why this is a domain of this credential</span>
+        <textarea id="dRat">${esc(d.rationale)}</textarea></label>
+      <span class="lh" style="font-family:var(--m);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--slate);display:block;margin-bottom:7px">C-BEN elements this domain answers to</span>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        ${Object.keys(CBEN).map(n=>`<button class="chip chip-btn K${d.cben.includes(+n)?" fill":" off"}" data-cben="${n}" title="${esc(CBEN[n])}">${n}</button>`).join("")}
+      </div>
+      <div class="row-actions">
+        <button class="add-btn" id="addComp">+ Add competency to this domain</button>
+        <button class="add-btn" id="delDom" style="color:var(--bad);border-color:#E5BEBA">Delete domain</button>
+      </div>
+    </div>
+  </section>`;
+
+  document.getElementById("dTitle").oninput = e => { d.title = e.target.value; scheduleSave(); renderTree(); };
+  document.getElementById("dRat").oninput = e => { d.rationale = e.target.value; scheduleSave(); };
+  p.querySelectorAll("[data-cben]").forEach(b => b.onclick = () => {
+    const n = +b.dataset.cben; const i = d.cben.indexOf(n);
+    i>=0 ? d.cben.splice(i,1) : d.cben.push(n); d.cben.sort();
+    scheduleSave(); renderDomPanel(p);
+  });
+  document.getElementById("addComp").onclick = () => addCompetency(d.id);
+  document.getElementById("delDom").onclick = () => {
+    if (!confirm(`Delete domain "${d.title}" and its ${compsIn(d.id).length} competencies?`)) return;
+    D().competencies = D().competencies.filter(c => c.domain !== d.id);
+    D().domains = D().domains.filter(x => x.id !== d.id);
+    state.sel = { type:"comp", id: comps()[0]?.id };
+    scheduleSave(); renderChrome(); renderTree(); renderPanel();
+  };
+}
+
+/* ---- statement ---- */
+function statementCard(c){
+  const dom = findDom(c.domain);
+  const sibs = compsIn(c.domain);
+  const pos = { i: sibs.indexOf(c), n: sibs.length };
+  return `
+  <section class="card">
+    <div class="card-h">
+      <span class="bar"></span><h3>Competency statement</h3>
+      ${cbenTag(2)}${cbenTag(7)}
+      <span class="sub">${c.id} · ${esc(dom?dom.title:"—")}${pos.n>1?` · ${pos.i+1} of ${pos.n}`:""}</span>
+    </div>
+    <div class="rec">
+      <label class="f"><span class="lh">Identifier</span>
+        <input type="text" id="sId" value="${esc(c.id)}" spellcheck="false" autocomplete="off"></label>
+      <label class="f"><span class="lh">Domain</span>
+        <select id="sDom">${D().domains.map(x=>`<option value="${x.id}"${x.id===c.domain?" selected":""}>${x.id} — ${esc(x.title)}</option>`).join("")}</select></label>
+      <div class="rec-acts">
+        <span class="lh">Order in domain</span>
+        <div class="nudge">
+          <button id="sUp" ${pos.i<=0?"disabled":""} title="Move up" aria-label="Move up">&#9650;</button>
+          <button id="sDown" ${pos.i>=pos.n-1?"disabled":""} title="Move down" aria-label="Move down">&#9660;</button>
+        </div>
+        <button class="add-btn" id="sDup" title="Copy this competency as a starting point">Duplicate</button>
+      </div>
+    </div>
+    <div class="card-b">
+      <div class="stmt-grid">
+        <label class="f"><span class="lh">Action verb</span><input type="text" id="sVerb" value="${esc(c.verb)}" placeholder="Diagnose"></label>
+        <label class="f"><span class="lh">Object of performance</span><input type="text" id="sObj" value="${esc(c.object)}" placeholder="what is acted on"></label>
+        <span class="lh" style="padding-top:9px;font-family:var(--m);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--slate)">Context</span>
+        <textarea id="sCtx" placeholder="where, with what, under what conditions">${esc(c.context)}</textarea>
+        <span class="lh" style="padding-top:9px;font-family:var(--m);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--slate)">Criteria</span>
+        <textarea id="sCrit" placeholder="how well, how often, how independently">${esc(c.criteria)}</textarea>
+      </div>
+      <div class="readout"><span class="rh">Assembled statement</span><span id="sOut">${stmtHtml(c)}</span></div>
+      <div style="margin-top:16px" class="grid4">
+        <label class="f"><span class="lh">Cognitive level</span><select id="sLvl">${opts(LEVELS,c.level)}</select></label>
+        ${D().tracks ? `<label class="f"><span class="lh">Track</span><select id="sTrk">
+          <option value="both"${c.track==="both"?" selected":""}>Both tracks</option>
+          ${D().tracks.map(t=>`<option value="${t.id}"${c.track===t.id?" selected":""}>${esc(t.label)} only</option>`).join("")}
+        </select></label>` : ""}
+        <label class="f"><span class="lh">Externally validated</span><select id="sVal">
+          <option value="1"${c.validated?" selected":""}>Yes</option><option value="0"${!c.validated?" selected":""}>Not yet</option></select></label>
+        <label class="f"><span class="lh">Validated by</span><input type="text" id="sValBy" value="${esc(c.validatedBy)}" placeholder="partner, date"></label>
+      </div>
+      <label class="f" style="margin-top:14px"><span class="lh">Definition shown to learners</span>
+        <textarea id="sDef">${esc(c.definition)}</textarea></label>
+      <div class="row-actions">
+        <button class="add-btn" id="delComp" style="color:var(--bad);border-color:#E5BEBA">Delete competency</button>
+      </div>
+    </div>
+  </section>`;
+}
+function stmtHtml(c){
+  if (!c.verb && !c.object) return `<em style="color:#78818A">Fill the four parts above and the statement assembles here.</em>`;
+  return `<span class="v">${esc(c.verb)}</span> ${esc(c.object)}${c.context?`, <span class="c">${esc(c.context)}</span>`:""}${c.criteria?`, <span class="cr">${esc(c.criteria)}</span>`:""}.`;
+}
+function wireStatement(c){
+  const live = () => { document.getElementById("sOut").innerHTML = stmtHtml(c); scheduleSave(); };
+  const bind = (id, k, after) => { const e = document.getElementById(id); if(!e) return;
+    e.oninput = ev => { c[k] = ev.target.value; live(); if (after) after(); }; };
+  bind("sVerb","verb",()=>renderTree()); bind("sObj","object",()=>renderTree());
+  bind("sCtx","context"); bind("sCrit","criteria");
+  document.getElementById("sDef").oninput = e => { c.definition = e.target.value; scheduleSave(); };
+  document.getElementById("sLvl").onchange = e => { c.level = e.target.value; scheduleSave(); };
+  document.getElementById("sVal").onchange = e => { c.validated = e.target.value === "1"; scheduleSave(); };
+  document.getElementById("sValBy").oninput = e => { c.validatedBy = e.target.value; scheduleSave(); };
+  const tk = document.getElementById("sTrk");
+  if (tk) tk.onchange = e => { c.track = e.target.value; scheduleSave(); renderChrome(); renderTree(); };
+  const idBox = document.getElementById("sId");
+  idBox.onchange = e => {
+    const r = renameCompetency(c, e.target.value);
+    if (!r.ok){ e.target.value = c.id; flashError(e.target, r.msg); return; }
+    scheduleSave(); renderTree(); renderPanel();
+  };
+  idBox.onkeydown = e => { if (e.key === "Enter") e.target.blur(); };
+  document.getElementById("sDom").onchange = e => reassignCompetency(c, e.target.value);
+  document.getElementById("sUp").onclick = () => moveCompetency(c, -1);
+  document.getElementById("sDown").onclick = () => moveCompetency(c, 1);
+  document.getElementById("sDup").onclick = () => duplicateCompetency(c);
+  document.getElementById("delComp").onclick = () => {
+    if (!confirm(`Delete competency ${c.id}?`)) return;
+    D().competencies = D().competencies.filter(x=>x.id!==c.id);
+    state.sel = { type:"comp", id: comps()[0]?.id };
+    scheduleSave(); renderChrome(); renderTree(); renderPanel();
+  };
+}
+
+/* ---- KSAB ---- */
+function ksabCard(c){
+  const ks = c.ksabs || [];
+  const counts = { K:0,S:0,A:0,B:0 }; ks.forEach(k=>counts[k.type]++);
+  const tot = ks.length || 1;
+  const covered = new Set(c.assessment.covers||[]);
+  const targeted = new Set((c.activities||[]).flatMap(a=>a.targets||[]));
+  return `
+  <section class="card">
+    <div class="card-h">
+      <span class="bar"></span><h3>Knowledge · Skills · Abilities · Behaviors</h3>${cbenTag(2)}
+      <span class="sub">${ks.length} components</span>
+    </div>
+    <div class="card-b">
+      <div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-bottom:16px">
+        ${["K","S","A","B"].map(t=>`<span class="chip ${t} fill" title="${esc(KTYPE[t].hint)}">${t} · ${KTYPE[t].label} <b style="font-family:var(--m)">${counts[t]}</b></span>`).join("")}
+        <div style="flex:1;min-width:130px">
+          <div class="balance">${["K","S","A","B"].map(t=>`<i style="width:${counts[t]/tot*100}%;background:var(--${t})"></i>`).join("")}</div>
+        </div>
+      </div>
+      <div id="ksList">
+      ${ks.map(k=>`
+        <div class="ks-row" data-k="${k.id}">
+          <span class="ks-id">${k.id}</span>
+          <select class="ks-${k.type}" data-f="type">${["K","S","A","B"].map(t=>`<option value="${t}"${k.type===t?" selected":""}>${t}</option>`).join("")}</select>
+          <div>
+            <input type="text" data-f="text" value="${esc(k.text)}">
+            <div style="display:flex;gap:7px;margin-top:6px;font-family:var(--m);font-size:10px;letter-spacing:.06em">
+              <span style="color:${covered.has(k.id)?"var(--ok)":"var(--bad)"}">${covered.has(k.id)?"assessed":"not assessed"}</span>
+              <span style="color:var(--rule)">|</span>
+              <span style="color:${targeted.has(k.id)?"var(--ok)":"var(--warn)"}">${targeted.has(k.id)?"taught":"no activity"}</span>
+            </div>
+          </div>
+          <button class="icon-btn" data-del="${k.id}" title="Remove ${k.id}">×</button>
+        </div>`).join("") || `<p style="color:var(--slate);font-size:13px;margin:0 0 6px">No components yet. Decompose the competency into what a graduate must know, do, transfer, and habitually demonstrate.</p>`}
+      </div>
+      <div class="row-actions">
+        ${["K","S","A","B"].map(t=>`<button class="add-btn" data-add="${t}">+ ${KTYPE[t].label}</button>`).join("")}
+      </div>
+    </div>
+  </section>`;
+}
+function wireKsab(c){
+  const list = document.getElementById("ksList");
+  list.querySelectorAll(".ks-row").forEach(row => {
+    const k = c.ksabs.find(x=>x.id===row.dataset.k);
+    row.querySelector("[data-f=type]").onchange = e => {
+      const nid = nextId(c.ksabs.filter(x=>x.id!==k.id), e.target.value);
+      const old = k.id; k.type = e.target.value; k.id = nid;
+      const cv = c.assessment.covers; const i = cv.indexOf(old); if (i>=0) cv[i] = nid;
+      (c.activities||[]).forEach(a => { const j = (a.targets||[]).indexOf(old); if (j>=0) a.targets[j] = nid; });
+      scheduleSave(); renderPanel();
+    };
+    row.querySelector("[data-f=text]").oninput = e => { k.text = e.target.value; scheduleSave(); };
+    row.querySelector("[data-del]").onclick = () => {
+      c.ksabs = c.ksabs.filter(x=>x.id!==k.id);
+      c.assessment.covers = c.assessment.covers.filter(x=>x!==k.id);
+      (c.activities||[]).forEach(a => a.targets = (a.targets||[]).filter(x=>x!==k.id));
+      scheduleSave(); renderChrome(); renderPanel();
+    };
+  });
+  document.querySelectorAll("[data-add]").forEach(b => {
+    if (!["K","S","A","B"].includes(b.dataset.add)) return;
+    b.onclick = () => {
+      const t = b.dataset.add;
+      const k = { id: nextId(c.ksabs, t), type: t, text: "" };
+      c.ksabs.push(k); c.assessment.covers.push(k.id);
+      scheduleSave(); renderChrome(); renderPanel();
+      const el = document.querySelector(`[data-k="${k.id}"] [data-f=text]`); if (el) el.focus();
+    };
+  });
+}
+
+/* ---- assessment ---- */
+function assessCard(c){
+  const a = c.assessment;
+  return `
+  <section class="card">
+    <div class="card-h"><span class="bar"></span><h3>Assessment strategy</h3>${cbenTag(4)}${cbenTag(7)}
+      <span class="sub">${(a.covers||[]).length} of ${(c.ksabs||[]).length} KSABs covered</span></div>
+    <div class="card-b">
+      <div class="grid4">
+        <label class="f"><span class="lh">Evidence type</span><select id="aEv">${opts(EVIDENCE,a.evidence)}</select></label>
+        <label class="f"><span class="lh">Purpose</span><select id="aMode">${opts(MODE,a.mode)}</select></label>
+        <label class="f"><span class="lh">Authenticity of setting</span><select id="aAuth">${opts(AUTHENTIC,a.authenticity)}</select></label>
+      </div>
+      <label class="f" style="margin-top:14px"><span class="lh">Mastery threshold</span>
+        <textarea id="aThr" placeholder="what counts as mastered, stated so two assessors would agree">${esc(a.threshold)}</textarea></label>
+      <div style="margin-top:16px">
+        <span class="lh" style="font-family:var(--m);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--slate);display:block;margin-bottom:7px">Rubric criteria</span>
+        <div id="rubList">
+        ${(a.rubric||[]).map((r,i)=>`
+          <div class="list-row" data-r="${i}">
+            <span class="n">${String(i+1).padStart(2,"0")}</span>
+            <input type="text" value="${esc(r)}">
+            <button class="icon-btn" data-delr="${i}" title="Remove row">×</button>
+          </div>`).join("")}
+        </div>
+        <div class="row-actions"><button class="add-btn" id="addRub">+ Rubric row</button></div>
+      </div>
+      <div style="margin-top:18px">
+        <span class="lh" style="font-family:var(--m);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--slate);display:block;margin-bottom:7px">KSABs this assessment produces evidence for</span>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          ${(c.ksabs||[]).map(k=>`<button class="chip chip-btn ${k.type}${(a.covers||[]).includes(k.id)?" fill":" off"}" data-cov="${k.id}" title="${esc(k.text)}">${k.id}</button>`).join("") || `<span style="color:var(--slate);font-size:13px">Add KSABs first.</span>`}
+        </div>
+      </div>
+    </div>
+  </section>`;
+}
+function wireAssess(c){
+  const a = c.assessment;
+  document.getElementById("aEv").onchange = e => { a.evidence = e.target.value; scheduleSave(); };
+  document.getElementById("aMode").onchange = e => { a.mode = e.target.value; scheduleSave(); };
+  document.getElementById("aAuth").onchange = e => { a.authenticity = e.target.value; scheduleSave(); };
+  document.getElementById("aThr").oninput = e => { a.threshold = e.target.value; scheduleSave(); };
+  document.querySelectorAll("#rubList .list-row").forEach(row => {
+    const i = +row.dataset.r;
+    row.querySelector("input").oninput = e => { a.rubric[i] = e.target.value; scheduleSave(); };
+    row.querySelector("[data-delr]").onclick = () => { a.rubric.splice(i,1); scheduleSave(); renderPanel(); };
+  });
+  document.getElementById("addRub").onclick = () => { a.rubric.push(""); scheduleSave(); renderPanel();
+    const rows = document.querySelectorAll("#rubList input"); rows[rows.length-1]?.focus(); };
+  document.querySelectorAll("[data-cov]").forEach(b => b.onclick = () => {
+    const id = b.dataset.cov; const i = a.covers.indexOf(id);
+    i>=0 ? a.covers.splice(i,1) : a.covers.push(id);
+    scheduleSave(); renderPanel();
+  });
+}
+
+/* ---- activities ---- */
+function activityCard(c){
+  const hrs = (c.activities||[]).reduce((n,a)=>n+(+a.hours||0),0);
+  return `
+  <section class="card">
+    <div class="card-h"><span class="bar"></span><h3>Learning activities</h3>${cbenTag(3)}${cbenTag(5)}
+      <span class="sub">${(c.activities||[]).length} activities · ${hrs} contact hours</span></div>
+    <div class="card-b">
+      <div id="actList">
+      ${(c.activities||[]).map(a=>`
+        <div class="act" data-a="${a.id}">
+          <div class="act-top">
+            <input type="text" data-f="title" value="${esc(a.title)}" placeholder="What learners actually do">
+            <select data-f="modality">${opts(MODALITY,a.modality)}</select>
+            <input type="number" data-f="hours" value="${a.hours}" min="0" step="1" aria-label="Contact hours">
+            <button class="icon-btn" data-dela="${a.id}" title="Remove activity">×</button>
+          </div>
+          <div class="targets">
+            <span class="lh">Develops</span>
+            ${(c.ksabs||[]).map(k=>`<button class="chip chip-btn ${k.type}${(a.targets||[]).includes(k.id)?" fill":" off"}" data-tg="${a.id}|${k.id}" title="${esc(k.text)}">${k.id}</button>`).join("") || `<span style="color:var(--slate);font-size:12.5px">No KSABs to align to yet.</span>`}
+          </div>
+        </div>`).join("") || `<p style="color:var(--slate);font-size:13px;margin:0 0 6px">No activities yet. Element 3 expects every competency to connect to content designed to develop it.</p>`}
+      </div>
+      <div class="row-actions"><button class="add-btn" id="addAct">+ Learning activity</button></div>
+    </div>
+  </section>`;
+}
+function wireActivity(c){
+  document.querySelectorAll("#actList .act").forEach(el => {
+    const a = c.activities.find(x=>x.id===el.dataset.a);
+    el.querySelector("[data-f=title]").oninput = e => { a.title = e.target.value; scheduleSave(); };
+    el.querySelector("[data-f=modality]").onchange = e => { a.modality = e.target.value; scheduleSave(); };
+    el.querySelector("[data-f=hours]").oninput = e => { a.hours = +e.target.value || 0; scheduleSave(); };
+    el.querySelector("[data-dela]").onclick = () => { c.activities = c.activities.filter(x=>x.id!==a.id); scheduleSave(); renderChrome(); renderPanel(); };
+  });
+  document.querySelectorAll("[data-tg]").forEach(b => b.onclick = () => {
+    const [aid,kid] = b.dataset.tg.split("|");
+    const a = c.activities.find(x=>x.id===aid); a.targets = a.targets || [];
+    const i = a.targets.indexOf(kid); i>=0 ? a.targets.splice(i,1) : a.targets.push(kid);
+    scheduleSave(); renderPanel();
+  });
+  document.getElementById("addAct").onclick = () => {
+    c.activities = c.activities || [];
+    c.activities.push({ id: nextId(c.activities,"L"), title:"", modality:"Guided lab", hours:0, targets:[] });
+    scheduleSave(); renderChrome(); renderPanel();
+    const t = document.querySelectorAll("#actList [data-f=title]"); t[t.length-1]?.focus();
+  };
+}
+
+/* ============================================================ TRACE */
+function renderTrace(root){
+  const cs = comps();
+  root.innerHTML = `
+    <p class="trace-hint">Every line is an alignment claim. A KSAB with no line to the assessment is not being measured; a KSAB with no line to an activity is not being taught. Hover any node to isolate its chain.</p>
+    <div class="legend">
+      <span><i></i> assessed by</span>
+      <span><i class="act"></i> developed by</span>
+      <span><i class="orph"></i> not covered by the assessment</span>
+    </div>
+    <div class="trace-wrap" id="tw">
+      <svg class="trace-svg" id="tsvg" aria-hidden="true"></svg>
+      ${cs.map(c => {
+        const covered = new Set(c.assessment.covers||[]);
+        const targeted = new Set((c.activities||[]).flatMap(a=>a.targets||[]));
+        const dom = findDom(c.domain);
+        return `<div class="tblock">
+          <div class="tblock-h">
+            <span class="id">${c.id}</span>
+            <h4>${esc(compLabel(c))}</h4>
+            <span class="cben-tag">${esc(dom?dom.title:"—")}</span>
+            <span class="cben-tag">${esc(c.level)}</span>
+          </div>
+          <div class="lanes">
+            <div class="lane">
+              <div class="lane-h">KSAB components</div>
+              ${(c.ksabs||[]).map(k=>{
+                const orph = !covered.has(k.id);
+                return `<div class="node ks ${k.type}${orph?" orphan":""}" data-node="${c.id}|${k.id}" data-kind="ks">
+                  <span class="nid">${k.id}</span>${esc(k.text)}</div>`;
+              }).join("") || `<div class="node orphan">No KSABs defined</div>`}
+            </div>
+            <div class="lane">
+              <div class="lane-h">Assessment</div>
+              <div class="node asmt" data-node="${c.id}|ASMT" data-kind="as">
+                <span class="nid">${esc(c.assessment.mode.slice(0,4).toUpperCase())}</span>${esc(c.assessment.evidence)} evidence
+                <span class="meta">${esc(c.assessment.authenticity)} · ${(c.assessment.rubric||[]).length} rubric rows</span>
+              </div>
+              <div class="thr">${esc(c.assessment.threshold) || "<em>No threshold set</em>"}</div>
+            </div>
+            <div class="lane">
+              <div class="lane-h">Learning activities</div>
+              ${(c.activities||[]).map(a=>`
+                <div class="node" data-node="${c.id}|${a.id}" data-kind="act">
+                  <span class="nid">${a.id}</span>${esc(a.title)}
+                  <span class="meta" style="display:block;font-family:var(--m);font-size:10px;color:var(--slate-2);margin-top:4px">${esc(a.modality)} · ${a.hours}h</span>
+                </div>`).join("") || `<div class="node orphan">No activities</div>`}
+            </div>
+          </div>
+        </div>`;
+      }).join("") || `<div class="card"><div class="empty"><strong>Nothing to trace</strong>This track has no competencies yet.</div></div>`}
+    </div>`;
+  requestAnimationFrame(drawLines);
+  window.addEventListener("resize", debouncedDraw);
+  wireTraceHover();
+}
+let dTimer; const debouncedDraw = () => { clearTimeout(dTimer); dTimer = setTimeout(drawLines, 120); };
+
+function drawLines(){
+  const wrap = document.getElementById("tw"); const svg = document.getElementById("tsvg");
+  if (!wrap || !svg) return;
+  const W = wrap.scrollWidth, H = wrap.scrollHeight;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.setAttribute("width", W); svg.setAttribute("height", H);
+  const base = wrap.getBoundingClientRect();
+  const R = el => { const r = el.getBoundingClientRect();
+    return { l:r.left-base.left+wrap.scrollLeft, t:r.top-base.top+wrap.scrollTop, w:r.width, h:r.height }; };
+  const paths = [];
+  for (const c of comps()){
+    const covered = new Set(c.assessment.covers||[]);
+    for (const k of (c.ksabs||[])){
+      const from = wrap.querySelector(`[data-node="${c.id}|${k.id}"]`); if (!from) continue;
+      const a = R(from);
+      const link = (to, cls) => {
+        const b = R(to);
+        const x1=a.l+a.w, y1=a.t+a.h/2, x2=b.l, y2=b.t+b.h/2, mx=(x1+x2)/2;
+        paths.push(`<path d="M${x1} ${y1} C${mx} ${y1} ${mx} ${y2} ${x2} ${y2}" class="${cls}" data-link="${c.id}|${k.id}"/>`);
+      };
+      if (covered.has(k.id)){ const as = wrap.querySelector(`[data-node="${c.id}|ASMT"]`); if (as) link(as, "l-as"); }
+      for (const act of (c.activities||[])) if ((act.targets||[]).includes(k.id)){
+        const el = wrap.querySelector(`[data-node="${c.id}|${act.id}"]`); if (el) link(el, "l-act");
+      }
+    }
+  }
+  svg.innerHTML = `<style>
+    path{fill:none;stroke-width:1.4}
+    .l-as{stroke:#14161A;opacity:.5}
+    .l-act{stroke:#0F7A69;opacity:.42;stroke-dasharray:3 3}
+    path.hot{stroke:#E0A800;opacity:1;stroke-width:2.4;stroke-dasharray:none}
+    path.faint{opacity:.07}
+  </style>` + paths.join("");
+}
+
+function wireTraceHover(){
+  const wrap = document.getElementById("tw"); if (!wrap) return;
+  const clear = () => {
+    wrap.querySelectorAll(".node").forEach(n=>n.classList.remove("dim","hot"));
+    wrap.querySelectorAll("#tsvg path").forEach(p=>p.classList.remove("hot","faint"));
+  };
+  wrap.querySelectorAll("[data-node]").forEach(n => {
+    n.onmouseenter = () => {
+      const [cid, part] = n.dataset.node.split("|");
+      const c = findComp(cid); if (!c) return;
+
+      // the set of node keys in this competency's chain, and the link keys to light up
+      const nodeKeys = new Set([n.dataset.node]);
+      const linkKeys = new Set();
+
+      if (n.dataset.kind === "ks"){
+        linkKeys.add(cid + "|" + part);
+        if ((c.assessment.covers||[]).includes(part)) nodeKeys.add(cid + "|ASMT");
+        (c.activities||[]).forEach(a => { if ((a.targets||[]).includes(part)) nodeKeys.add(cid + "|" + a.id); });
+      } else {
+        const keys = n.dataset.kind === "as"
+          ? (c.assessment.covers || [])
+          : ((c.activities.find(a=>a.id===part)||{}).targets || []);
+        keys.forEach(k => { nodeKeys.add(cid + "|" + k); linkKeys.add(cid + "|" + k); });
+      }
+
+      const block = n.closest(".tblock") || wrap;
+      block.querySelectorAll(".node").forEach(x => x.classList.add("dim"));
+      wrap.querySelectorAll("#tsvg path").forEach(p => {
+        if (String(p.dataset.link||"").startsWith(cid + "|")) p.classList.add("faint");
+      });
+      nodeKeys.forEach(k => {
+        const el = wrap.querySelector('[data-node="' + k + '"]');
+        if (el){ el.classList.remove("dim"); el.classList.add("hot"); }
+      });
+      wrap.querySelectorAll("#tsvg path").forEach(p => {
+        if (linkKeys.has(p.dataset.link)){ p.classList.remove("faint"); p.classList.add("hot"); }
+      });
+    };
+    n.onmouseleave = clear;
+  });
+}
+
+/* ============================================================ QUALITY */
+function renderQuality(root){
+  const f = audit();
+  const byEl = {};
+  Object.keys(CBEN).forEach(n => byEl[n] = { error:0, warn:0, info:0 });
+  f.forEach(x => byEl[x.cben][x.sev]++);
+  const covered = new Set([2,3,4,6,7]);
+
+  root.innerHTML = `
+    <div class="notice">This panel evaluates the framework you have built against the parts of C-BEN's eight Elements of Quality that a competency map can evidence. Elements 1, 5 and 8 are institutional and programmatic — they are shown for completeness but cannot be checked from a competency map alone.</div>
+    <div class="q-grid">
+      ${Object.keys(CBEN).map(n=>{
+        const s = byEl[n]; const inScope = covered.has(+n);
+        const cls = !inScope ? "na" : s.error ? "flag" : s.warn ? "soft" : "pass";
+        const txt = !inScope ? "Not machine-checkable" : s.error ? `${s.error} blocking` : s.warn ? `${s.warn} to review` : "Clear";
+        return `<div class="q-el${inScope?" hit":""}">
+          <span class="num">${String(n).padStart(2,"0")}</span>
+          <div><h4>${esc(CBEN[n])}</h4><span class="st ${cls}">${txt}</span></div>
+        </div>`;
+      }).join("")}
+    </div>
+    <section class="card">
+      <div class="card-h"><span class="bar"></span><h3>Findings</h3>
+        <span class="sub">${f.filter(x=>x.sev==="error").length} blocking · ${f.filter(x=>x.sev==="warn").length} to review · ${f.filter(x=>x.sev==="info").length} notes</span></div>
+      ${f.length ? f.map(x=>`
+        <div class="f-row">
+          <span class="sev ${x.sev}">${x.sev==="error"?"Blocking":x.sev==="warn"?"Review":"Note"} · E${x.cben}</span>
+          ${x.locId ? `<button class="loc" data-go="${x.locId}">${esc(x.loc)}</button>` : `<span class="loc" style="color:var(--slate-2)">${esc(x.loc)}</span>`}
+          <div class="msg">${esc(x.msg)}${x.why?`<small>${esc(x.why)}</small>`:""}</div>
+        </div>`).join("")
+      : `<div class="empty"><strong>Nothing flagged</strong>Every competency in this track carries measurable criteria, full KSAB coverage, and aligned activities.</div>`}
+    </section>`;
+
+  root.querySelectorAll("[data-go]").forEach(b => b.onclick = () => {
+    const id = b.dataset.go;
+    state.sel = { type: id.startsWith("D") && !id.includes(".") ? "dom" : "comp", id };
+    state.view = "build"; renderTabs(); renderMain(); window.scrollTo({top:0});
+  });
+}
+
+/* ============================================================ EXPORT */
+function toMarkdown(){
+  const d = D();
+  const t = d.tracks ? d.tracks.find(x=>x.id===state.track) : null;
+  const L = [];
+  L.push(`# ${d.program}`, "");
+  L.push(`**Credential:** ${d.credential}  `);
+  L.push(`**Site:** ${d.site}  `);
+  if (t) L.push(`**Track:** ${t.label}  `);
+  L.push(`**Framework standard:** C-BEN Quality Framework for Competency-Based Education Programs  `);
+  L.push(`**Generated:** ${new Date().toISOString().slice(0,10)}`, "");
+  L.push(`**External frameworks:** ${d.frames.join("; ")}`, "");
+  L.push(`**Validating partners:** ${d.partners.join("; ")}`, "");
+  L.push("---", "");
+  for (const dom of domains()){
+    const cs = compsIn(dom.id); if (!cs.length) continue;
+    L.push(`## ${dom.id} — ${dom.title}`, "");
+    if (dom.rationale) L.push(`_${dom.rationale}_`, "");
+    if (dom.cben?.length) L.push(`C-BEN elements: ${dom.cben.map(n=>`${n} (${CBEN[n]})`).join("; ")}`, "");
+    for (const c of cs){
+      L.push(`### ${c.id} — ${c.verb} ${c.object}`, "");
+      L.push(`**Competency statement.** ${c.verb} ${c.object}${c.context?`, ${c.context}`:""}${c.criteria?`, ${c.criteria}`:""}.`, "");
+      if (c.definition) L.push(`**Definition.** ${c.definition}`, "");
+      L.push(`**Cognitive level:** ${c.level} · **External validation:** ${c.validated ? (c.validatedBy||"Yes") : "Not yet validated"}`, "");
+      L.push(`#### KSAB components`, "");
+      L.push(`| ID | Type | Component | Assessed | Taught |`, `|---|---|---|---|---|`);
+      const cov = new Set(c.assessment.covers||[]), tgt = new Set((c.activities||[]).flatMap(a=>a.targets||[]));
+      for (const k of c.ksabs||[])
+        L.push(`| ${k.id} | ${KTYPE[k.type].label} | ${k.text.replace(/\|/g,"\\|")} | ${cov.has(k.id)?"yes":"**no**"} | ${tgt.has(k.id)?"yes":"**no**"} |`);
+      L.push("");
+      const a = c.assessment;
+      L.push(`#### Assessment strategy`, "");
+      L.push(`- **Evidence:** ${a.evidence} · **Purpose:** ${a.mode} · **Setting:** ${a.authenticity}`);
+      L.push(`- **Mastery threshold:** ${a.threshold||"_not set_"}`);
+      L.push(`- **Rubric criteria:**`);
+      (a.rubric||[]).forEach(r => L.push(`  - ${r}`));
+      if (!(a.rubric||[]).length) L.push(`  - _none defined_`);
+      L.push(`- **Covers:** ${(a.covers||[]).join(", ")||"_none_"}`, "");
+      L.push(`#### Learning activities`, "");
+      L.push(`| ID | Activity | Modality | Hours | Develops |`, `|---|---|---|---|---|`);
+      for (const act of c.activities||[])
+        L.push(`| ${act.id} | ${act.title.replace(/\|/g,"\\|")} | ${act.modality} | ${act.hours} | ${(act.targets||[]).join(", ")} |`);
+      if (!(c.activities||[]).length) L.push(`| — | _none defined_ | | | |`);
+      L.push("");
+    }
+  }
+  const f = audit();
+  L.push("---", "", `## Quality check summary`, "");
+  L.push(`${f.filter(x=>x.sev==="error").length} blocking, ${f.filter(x=>x.sev==="warn").length} to review, ${f.filter(x=>x.sev==="info").length} notes.`, "");
+  for (const x of f) L.push(`- **${x.sev==="error"?"Blocking":x.sev==="warn"?"Review":"Note"}** (Element ${x.cben}) — ${x.loc}: ${x.msg}`);
+  return L.join("\n");
+}
+
+function download(name, text, type){
+  const b = new Blob([text], {type});
+  const u = URL.createObjectURL(b);
+  const a = document.createElement("a"); a.href = u; a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(u), 2000);
+}
+
+function renderExport(root){
+  const md = toMarkdown();
+  root.innerHTML = `
+    <div class="ex-actions">
+      <button class="btn" id="dlMd">Download Markdown</button>
+      <button class="btn ghost" id="dlJson">Download JSON</button>
+      <button class="btn ghost" id="copyMd">Copy Markdown</button>
+      <label class="btn ghost" style="display:inline-flex;align-items:center">Import JSON
+        <input type="file" id="imp" accept="application/json,.json" class="sr"></label>
+      <button class="btn danger" id="reset">Reset this discipline to seed</button>
+      <span class="saved" style="align-self:center;margin-left:auto">Saved</span>
+    </div>
+    <div class="notice">Markdown is the curriculum-committee artifact — paste it into a document, a proposal, or an accreditation narrative. JSON round-trips the full framework so you can hand it to a colleague, version it, or load it into another system.</div>
+    <pre class="out" id="mdOut">${esc(md)}</pre>`;
+
+  const slug = D().program.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,50);
+  document.getElementById("dlMd").onclick = () => download(`${slug}-competency-framework.md`, md, "text/markdown");
+  document.getElementById("dlJson").onclick = () => download(`${slug}-competency-framework.json`, JSON.stringify(D(), null, 2), "application/json");
+  document.getElementById("copyMd").onclick = async e => {
+    try{ await navigator.clipboard.writeText(md); e.target.textContent = "Copied"; setTimeout(()=>e.target.textContent="Copy Markdown", 1600); }
+    catch(err){ const p = document.getElementById("mdOut"); const r = document.createRange(); r.selectNode(p);
+      getSelection().removeAllRanges(); getSelection().addRange(r); e.target.textContent = "Selected — press Ctrl/Cmd+C"; }
+  };
+  document.getElementById("imp").onchange = ev => {
+    const file = ev.target.files[0]; if (!file) return;
+    const r = new FileReader();
+    r.onload = () => {
+      try{
+        const j = JSON.parse(r.result);
+        if (!j.domains || !j.competencies) throw new Error("shape");
+        state.data = j;
+        state.track = D().tracks ? D().tracks[0].id : "ice";
+        state.sel = { type:"comp", id: comps()[0]?.id };
+        scheduleSave(); renderAll();
+      }catch(e){ alert("That file is not a competency framework export. Expecting JSON with domains and competencies."); }
+    };
+    r.readAsText(file);
+  };
+  document.getElementById("reset").onclick = async () => {
+    if (!confirm(`Discard all edits to ${D().name} and restore the seeded framework?`)) return;
+    try{ await window.storage.delete(KEY(state.disc)); }catch(e){}
+    state.data = clone(SEED[state.disc]);
+    state.track = D().tracks ? D().tracks[0].id : "ice";
+    state.sel = { type:"comp", id: comps()[0]?.id };
+    renderAll();
+  };
+}
+
+/* ============================================================ BOOT */
+(async function(){
+  state.data = await load(state.disc);
+  state.sel = { type:"comp", id: comps()[0]?.id };
+  renderAll();
+})();
+</script>
+</body>
+</html>
