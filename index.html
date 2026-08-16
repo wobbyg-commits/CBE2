@@ -283,6 +283,89 @@ pre.out{
 @media(max-width:760px){.band-in{grid-template-columns:1fr;gap:14px}.band h2{font-size:19px}}
 html{overflow-x:hidden}
 .chrome-in,.band-in,.tabs-in,main{width:100%}
+/* ---------- header tools: save / print ---------- */
+.tools{display:flex;align-items:center;gap:7px}
+.tools .tbtn{
+  font-family:var(--d);font-size:12px;font-weight:600;letter-spacing:.02em;
+  padding:7px 13px;border-radius:2px;border:1px solid #454C54;color:#E7EBEF;background:var(--ink-3);
+  display:inline-flex;align-items:center;gap:7px;white-space:nowrap;
+}
+.tools .tbtn:hover{background:var(--signal);border-color:var(--signal);color:var(--ink)}
+.tools .tbtn kbd{
+  font-family:var(--m);font-size:9px;letter-spacing:.06em;color:#98A1A9;
+  border:1px solid #4E555D;border-radius:2px;padding:1px 4px;
+}
+.tools .tbtn:hover kbd{color:var(--ink-2);border-color:rgba(20,22,26,.32)}
+.opts{display:flex;gap:16px;flex-wrap:wrap;align-items:center;padding:11px 14px;border:1px solid var(--rule);
+  background:var(--card);border-radius:3px;margin-bottom:14px}
+.opts .oh{font-family:var(--m);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--slate)}
+.opts label{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;cursor:pointer}
+
+/* ---------- coverage matrix ---------- */
+.mx-wrap{overflow-x:auto;border:1px solid var(--rule);border-radius:3px;background:var(--card)}
+table.mx{border-collapse:collapse;width:100%;font-size:13px;min-width:520px}
+table.mx th,table.mx td{padding:8px 10px;border-bottom:1px solid var(--rule-2);text-align:left;vertical-align:middle}
+table.mx tbody tr:last-child td{border-bottom:none}
+table.mx thead th{
+  font-family:var(--m);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--slate);
+  background:var(--card-2);border-bottom:1px solid var(--rule);font-weight:500;white-space:nowrap;
+}
+table.mx th.c,table.mx td.c{text-align:center;width:62px}
+table.mx th.c.assess{color:var(--ink);border-left:1px solid var(--rule);border-right:1px solid var(--rule)}
+table.mx td.c.assess{border-left:1px solid var(--rule-2);border-right:1px solid var(--rule-2)}
+table.mx tbody tr.gap{background:#FFFBF1}
+table.mx tbody tr.gap.blocked{background:#FDF4F3}
+table.mx tbody tr:hover{background:var(--card-2)}
+.mx-k{display:flex;gap:9px;align-items:baseline}
+.mx-k .mx-id{font-family:var(--m);font-size:11px;font-weight:600;min-width:24px}
+.mx-k .mx-tx{line-height:1.4}
+.cell{
+  width:28px;height:28px;border-radius:3px;border:1px solid var(--rule);background:#fff;color:var(--slate-2);
+  display:inline-flex;align-items:center;justify-content:center;font-size:14px;line-height:1;cursor:pointer;
+}
+.cell:hover{border-color:var(--ink);color:var(--ink)}
+.cell.on{background:#E7F4EE;border-color:#9CCBB4;color:var(--ok)}
+.cell.off.miss{border-style:dashed;border-color:#E0B4B0;color:#D08C86}
+.cell.off.soft{border-style:dashed;border-color:#E3CB99;color:#C09A4A}
+.mx-head{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;margin-bottom:10px}
+.mx-head .mx-t{font-family:var(--d);font-weight:700;font-size:14.5px}
+.mx-head .mx-id2{font-family:var(--m);font-size:11.5px;font-weight:600;color:var(--K)}
+.mx-head .mx-st{font-family:var(--m);font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.mx-head .mx-st.bad{color:var(--bad)} .mx-head .mx-st.warn{color:var(--warn)} .mx-head .mx-st.ok{color:var(--ok)}
+.mx-block{padding:16px 18px;border-top:1px solid var(--rule-2)}
+.mx-block:first-of-type{border-top:none}
+.mx-acts{display:flex;gap:9px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.mx-note{font-size:12px;color:var(--slate);margin-top:9px;line-height:1.5}
+.mini{font-family:var(--d);font-size:11.5px;font-weight:600;padding:5px 10px;border:1px solid var(--rule);
+  border-radius:2px;background:#fff;color:var(--ink);cursor:pointer}
+.mini:hover{border-color:var(--ink);background:var(--card-2)}
+.mini.go{border-color:#B9CFE2;color:var(--K)}
+.pulse{animation:pulseRow 1.5s ease-out 1}
+@keyframes pulseRow{0%{background:var(--signal)}100%{background:transparent}}
+.f-row{grid-template-columns:88px 76px 1fr auto}
+.f-fix{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.ks-flag{font-family:var(--m);font-size:10px;letter-spacing:.06em;cursor:pointer;background:none;padding:0;
+  border:none;border-bottom:1px dashed currentColor}
+.ks-flag:hover{opacity:.7}
+
+/* ---------- toast ---------- */
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:200;max-width:640px;
+  background:var(--ink);color:#EDF1F5;border-left:4px solid var(--signal);border-radius:3px;
+  padding:13px 16px;font-size:13px;line-height:1.5;box-shadow:0 6px 24px rgba(0,0,0,.28);
+  display:flex;gap:14px;align-items:flex-start;
+}
+.toast button{color:var(--signal);font-family:var(--d);font-size:12px;font-weight:600;flex:none}
+@media print{.toast{display:none!important}}
+
+/* ---------- printable document (hidden on screen, shown on paper) ---------- */
+.printdoc{display:none}
+@media print{
+  .chrome,.band,.tabs,main,.tools{display:none!important}
+  .printdoc{display:block!important}
+  html,body{background:#fff!important;margin:0!important;padding:0!important}
+}
+@page{margin:0.6in 0.7in}
 </style>
 </head>
 <body>
@@ -301,6 +384,11 @@ html{overflow-x:hidden}
       <span class="lbl">Track</span>
       <div class="seg sm" id="trackSeg" role="group" aria-label="Track"></div>
     </div>
+    <div class="tools">
+      <button class="tbtn" id="saveNow" title="Save this framework to this browser">Save <kbd>Ctrl S</kbd></button>
+      <button class="tbtn" id="pdfBtn" title="Download a typeset PDF of this framework">PDF <kbd>Ctrl P</kbd></button>
+      <button class="tbtn" id="printBtn" title="Open a printable page and send it to your printer">Print</button>
+    </div>
   </div>
 </header>
 
@@ -309,6 +397,8 @@ html{overflow-x:hidden}
 <nav class="tabs"><div class="tabs-in" id="tabs"></div></nav>
 
 <main id="main"></main>
+
+<section class="printdoc" id="printDoc" aria-hidden="true"></section>
 
 <script>
 /* ===== C-BEN Elements of Quality (2017 Quality Framework) ===== */
@@ -1504,13 +1594,21 @@ function audit(){
     const covered = new Set(c.assessment.covers || []);
     const targeted = new Set((c.activities||[]).flatMap(a => a.targets || []));
     for (const k of ks){
-      if (!covered.has(k.id)) push("error", 4, c.id + " " + k.id, c.id, `${k.id} is never assessed.`,
-        "Element 4 requires the assessment strategy to cover the competency. An unassessed KSAB is a claim the credential cannot support.");
-      if (!targeted.has(k.id)) push("warn", 3, c.id + " " + k.id, c.id, `${k.id} has no learning activity.`,
-        "Element 3 expects every competency to connect to content and activities designed to develop it. An unsupported KSAB asks learners to arrive already competent.");
+      if (!covered.has(k.id)){
+        push("error", 4, c.id + " " + k.id, c.id, `${k.id} is never assessed.`,
+          "Element 4 requires the assessment strategy to cover the competency. An unassessed KSAB is a claim the credential cannot support.");
+        out[out.length-1].fix = { kind:"cover", comp:c.id, ks:k.id };
+      }
+      if (!targeted.has(k.id)){
+        push("warn", 3, c.id + " " + k.id, c.id, `${k.id} has no learning activity.`,
+          "Element 3 expects every competency to connect to content and activities designed to develop it. An unsupported KSAB asks learners to arrive already competent.");
+        out[out.length-1].fix = { kind:"teach", comp:c.id, ks:k.id };
+      }
     }
-    for (const id of covered) if (!ks.some(k=>k.id===id))
+    for (const id of covered) if (!ks.some(k=>k.id===id)){
       push("info", 4, c.id, c.id, `Assessment references ${id}, which no longer exists.`, "");
+      out[out.length-1].fix = { kind:"stale", comp:c.id, ks:id };
+    }
 
     const a = c.assessment;
     if (!a.rubric || a.rubric.length < 2) push("warn", 4, c.id, c.id, "Rubric has fewer than two criteria.",
@@ -1736,8 +1834,9 @@ function renderPanel(){
   const c = selComp();
   if (!c){ p.innerHTML = `<div class="card"><div class="empty"><strong>Nothing selected</strong>Pick a competency from the framework, or add one.</div></div>`; return; }
 
-  p.innerHTML = statementCard(c) + ksabCard(c) + assessCard(c) + activityCard(c);
+  p.innerHTML = statementCard(c) + ksabCard(c) + assessCard(c) + matrixCard(c) + activityCard(c);
   wireStatement(c); wireKsab(c); wireAssess(c); wireActivity(c);
+  wireMatrix(p, () => renderPanel());
 }
 
 function renderDomPanel(p){
@@ -1895,9 +1994,13 @@ function ksabCard(c){
           <div>
             <input type="text" data-f="text" value="${esc(k.text)}">
             <div style="display:flex;gap:7px;margin-top:6px;font-family:var(--m);font-size:10px;letter-spacing:.06em">
-              <span style="color:${covered.has(k.id)?"var(--ok)":"var(--bad)"}">${covered.has(k.id)?"assessed":"not assessed"}</span>
+              <button class="ks-flag" data-mx="cover|${c.id}|${k.id}" style="color:${covered.has(k.id)?"var(--ok)":"var(--bad)"}"
+                title="${covered.has(k.id)?"Remove from the assessment":"Add to the assessment"}">${covered.has(k.id)?"assessed":"not assessed"}</button>
               <span style="color:var(--rule)">|</span>
-              <span style="color:${targeted.has(k.id)?"var(--ok)":"var(--warn)"}">${targeted.has(k.id)?"taught":"no activity"}</span>
+              ${targeted.has(k.id)
+                ? `<span style="color:var(--ok)">taught</span>`
+                : `<button class="ks-flag" data-mx="${(c.activities||[]).length?`act|${c.id}|${c.activities[0].id}|${k.id}`:`addact|${c.id}`}" style="color:var(--warn)"
+                    title="${(c.activities||[]).length?`Align to ${esc(c.activities[0].id)}`:"Add a learning activity"}">no activity</button>`}
             </div>
           </div>
           <button class="icon-btn" data-del="${k.id}" title="Remove ${k.id}">×</button>
@@ -2045,6 +2148,160 @@ function wireActivity(c){
   };
 }
 
+
+/* ============================================================ COVERAGE MATRIX
+   One grid per competency: every KSAB against the assessment and against each
+   learning activity. Clicking a cell edits the framework, so the quality check
+   can be answered where it is raised. */
+
+function compById(id){ return D().competencies.find(c => c.id === id); }
+function gapsOf(c){
+  const cov = new Set(c.assessment?.covers || []);
+  const tgt = new Set((c.activities || []).flatMap(a => a.targets || []));
+  const ks = c.ksabs || [];
+  return {
+    cov, tgt,
+    unassessed: ks.filter(k => !cov.has(k.id)),
+    untaught: ks.filter(k => !tgt.has(k.id)),
+    stale: [...cov].filter(id => !ks.some(k => k.id === id))
+  };
+}
+
+function coverageMatrix(c, opt = {}){
+  const g = gapsOf(c);
+  const acts = c.activities || [];
+  const all = c.ksabs || [];
+  const ks = opt.rows ? all.filter(k => opt.rows.has(c.id + "|" + k.id)) : all;
+  const hidden = all.length - ks.length;
+  const status = g.unassessed.length
+    ? `<span class="mx-st bad">${g.unassessed.length} unassessed</span>`
+    : `<span class="mx-st ok">Fully assessed</span>`;
+  const status2 = g.untaught.length ? `<span class="mx-st warn">${g.untaught.length} untaught</span>` : "";
+
+  if (!all.length) return `<p class="mx-note">No KSAB components yet — add them before mapping coverage.</p>`;
+  if (!ks.length) return `${opt.heading === false ? "" : `<div class="mx-head"><span class="mx-id2">${esc(c.id)}</span><span class="mx-t">${esc(c.verb)} ${esc(c.object)}</span><span class="mx-st ok">Nothing flagged</span></div>`}`;
+
+  const head = opt.heading === false ? "" : `
+    <div class="mx-head">
+      <span class="mx-id2">${esc(c.id)}</span>
+      <span class="mx-t">${esc(c.verb)} ${esc(c.object)}</span>
+      ${status}${status2}
+    </div>`;
+
+  const rows = ks.map(k => {
+    const noA = !g.cov.has(k.id), noT = !g.tgt.has(k.id);
+    return `<tr data-row="${c.id}|${k.id}" class="${noA || noT ? "gap" : ""}${noA ? " blocked" : ""}">
+      <td>
+        <div class="mx-k">
+          <span class="mx-id" style="color:var(--${k.type})">${esc(k.id)}</span>
+          <span class="mx-tx">${esc(k.text) || `<i style="color:var(--slate-2)">untitled component</i>`}</span>
+        </div>
+      </td>
+      <td class="c assess">
+        <button class="cell ${g.cov.has(k.id) ? "on" : "off miss"}" data-mx="cover|${c.id}|${k.id}"
+          title="${g.cov.has(k.id) ? "Covered by the assessment — click to remove" : "Not assessed — click to add it to the assessment"}"
+          aria-pressed="${g.cov.has(k.id)}">${g.cov.has(k.id) ? "\u2713" : "\u2717"}</button>
+      </td>
+      ${acts.map(a => {
+        const on = (a.targets || []).includes(k.id);
+        return `<td class="c">
+          <button class="cell ${on ? "on" : "off" + (noT ? " soft" : "")}" data-mx="act|${c.id}|${a.id}|${k.id}"
+            title="${esc(a.title || a.id)} \u2014 ${on ? "develops this component" : "click to align"}"
+            aria-pressed="${on}">${on ? "\u2713" : ""}</button>
+        </td>`;
+      }).join("")}
+    </tr>`;
+  }).join("");
+
+  const stale = g.stale.length ? `<p class="mx-note" style="color:var(--bad)">
+      The assessment still references ${g.stale.map(esc).join(", ")}, which no longer exist${g.stale.length > 1 ? "" : "s"}.
+      <button class="mini" data-mx="stale|${c.id}|${g.stale.join(",")}">Remove stale reference${g.stale.length > 1 ? "s" : ""}</button></p>` : "";
+
+  return `${head}
+    <div class="mx-wrap">
+      <table class="mx">
+        <thead><tr>
+          <th>KSAB component</th>
+          <th class="c assess">Assessed</th>
+          ${acts.map(a => `<th class="c" title="${esc(a.title || "untitled activity")}">${esc(a.id)}</th>`).join("")}
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+    ${hidden ? `<p class="mx-note" style="margin-top:7px">${hidden} component${hidden === 1 ? " that is" : "s that are"} already assessed and taught ${hidden === 1 ? "is" : "are"} hidden.</p>` : ""}
+    <div class="mx-acts">
+      <button class="mini" data-mx="addact|${c.id}">+ Learning activity</button>
+      ${g.untaught.length && acts.length ? `<button class="mini" data-mx="teachall|${c.id}|${acts[0].id}">Align untaught to ${esc(acts[0].id)}</button>` : ""}
+      ${g.unassessed.length ? `<button class="mini" data-mx="coverall|${c.id}">Mark all assessed</button>` : ""}
+      ${opt.go === false ? "" : `<button class="mini go" data-mx="go|${c.id}">Open in Build</button>`}
+    </div>
+    ${stale}
+    ${opt.note === false ? "" : `<p class="mx-note">A tick in <b>Assessed</b> means the assessment strategy gathers evidence of that component; a tick under an activity means that activity develops it. Marking a component assessed records a claim — the rubric and evidence still have to earn it.</p>`}`;
+}
+
+/* one wiring routine for every place the matrix appears */
+function wireMatrix(scope, after){
+  scope.querySelectorAll("[data-mx]").forEach(btn => {
+    btn.onclick = () => {
+      const [kind, cid, x, y] = btn.dataset.mx.split("|");
+      const c = compById(cid);
+      if (!c) return;
+      c.assessment = c.assessment || {}; c.assessment.covers = c.assessment.covers || [];
+      c.activities = c.activities || [];
+
+      if (kind === "cover"){
+        const i = c.assessment.covers.indexOf(x);
+        i >= 0 ? c.assessment.covers.splice(i, 1) : c.assessment.covers.push(x);
+      }
+      else if (kind === "act"){
+        const a = c.activities.find(v => v.id === x);
+        if (!a) return;
+        a.targets = a.targets || [];
+        const i = a.targets.indexOf(y);
+        i >= 0 ? a.targets.splice(i, 1) : a.targets.push(y);
+      }
+      else if (kind === "coverall"){
+        for (const k of c.ksabs || []) if (!c.assessment.covers.includes(k.id)) c.assessment.covers.push(k.id);
+        toast("Every component of " + c.id + " is now marked assessed. Check that the rubric and evidence actually reach them \u2014 the check can only see the claim.", 9000);
+      }
+      else if (kind === "teachall"){
+        const a = c.activities.find(v => v.id === x);
+        if (!a) return;
+        a.targets = a.targets || [];
+        const tgt = new Set(c.activities.flatMap(v => v.targets || []));
+        for (const k of c.ksabs || []) if (!tgt.has(k.id)) a.targets.push(k.id);
+      }
+      else if (kind === "stale"){
+        const drop = new Set(String(x).split(","));
+        c.assessment.covers = c.assessment.covers.filter(id => !drop.has(id));
+      }
+      else if (kind === "addact"){
+        c.activities.push({ id: nextId(c.activities, "L"), title: "", modality: "Guided lab", hours: 0, targets: [] });
+      }
+      else if (kind === "go"){
+        state.sel = { type:"comp", id: cid };
+        state.view = "build"; renderTabs(); renderMain(); window.scrollTo({ top:0 });
+        return;
+      }
+      scheduleSave();
+      renderChrome();
+      if (after) after(cid, y || x);
+    };
+  });
+}
+
+/* the Build panel gets the same grid as its own card */
+function matrixCard(c){
+  const g = gapsOf(c);
+  const n = g.unassessed.length + g.untaught.length;
+  return `
+  <section class="card">
+    <div class="card-h"><span class="bar"></span><h3>Coverage matrix</h3>${cbenTag(4)}
+      <span class="sub">${n ? `${g.unassessed.length} unassessed \u00B7 ${g.untaught.length} untaught` : "Every component assessed and taught"}</span></div>
+    <div class="card-b" id="mxCard">${coverageMatrix(c, { heading:false, go:false })}</div>
+  </section>`;
+}
+
 /* ============================================================ TRACE */
 function renderTrace(root){
   const cs = comps();
@@ -2182,12 +2439,27 @@ function wireTraceHover(){
 }
 
 /* ============================================================ QUALITY */
-function renderQuality(root){
+let repairSet = null;   /* competencies shown in the repair card this visit */
+let repairRows = null;  /* the specific KSAB rows flagged when the tab was opened */
+let repairAll = false;  /* show every component, not just the flagged ones */
+function renderQuality(root, keep){
   const f = audit();
   const byEl = {};
   Object.keys(CBEN).forEach(n => byEl[n] = { error:0, warn:0, info:0 });
   f.forEach(x => byEl[x.cben][x.sev]++);
   const covered = new Set([2,3,4,6,7]);
+  const hasGap = c => { const g = gapsOf(c); return g.unassessed.length || g.untaught.length || g.stale.length; };
+  const live = comps().filter(hasGap).map(c => c.id);
+  const liveRows = comps().flatMap(c => {
+    const g = gapsOf(c);
+    return [...new Set([...g.unassessed, ...g.untaught].map(k => c.id + "|" + k.id))];
+  });
+  if (!keep || !repairSet){ repairSet = new Set(live); repairRows = new Set(liveRows); }
+  else { live.forEach(id => repairSet.add(id)); liveRows.forEach(r => repairRows.add(r)); }
+  const gapComps = comps().filter(c => repairSet.has(c.id));
+  const totUn = gapComps.reduce((n, c) => n + gapsOf(c).unassessed.length, 0);
+  const totUt = gapComps.reduce((n, c) => n + gapsOf(c).untaught.length, 0);
+  const resolved = gapComps.filter(c => !hasGap(c)).length;
 
   root.innerHTML = `
     <div class="notice">This panel evaluates the framework you have built against the parts of C-BEN's eight Elements of Quality that a competency map can evidence. Elements 1, 5 and 8 are institutional and programmatic — they are shown for completeness but cannot be checked from a competency map alone.</div>
@@ -2202,6 +2474,20 @@ function renderQuality(root){
         </div>`;
       }).join("")}
     </div>
+    ${gapComps.length ? `
+    <section class="card">
+      <div class="card-h"><span class="bar"></span><h3>Repair coverage</h3>${cbenTag(4)}
+        <span class="sub">${totUn || totUt
+          ? `${totUn} unassessed · ${totUt} untaught across ${gapComps.length - resolved} competenc${gapComps.length - resolved === 1 ? "y" : "ies"}`
+          : "All gaps closed — reopen the tab to clear this panel"}${resolved ? ` · ${resolved} resolved` : ""}</span></div>
+      <div class="notice" style="margin:0;border-radius:0;border-left:none;border-right:none;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+        <span style="flex:1;min-width:260px">Each grid below is live. Tick <b>Assessed</b> to bring a component into the assessment strategy, or tick an activity column to say that activity develops it — the findings underneath update as you go.</span>
+        <label style="display:inline-flex;align-items:center;gap:7px;font-size:12.5px;white-space:nowrap;cursor:pointer">
+          <input type="checkbox" id="mxAll"${repairAll ? " checked" : ""}> Show every component
+        </label>
+      </div>
+      ${gapComps.map(c => `<div class="mx-block">${coverageMatrix(c, { note:false, rows: repairAll ? null : repairRows })}</div>`).join("")}
+    </section>` : ""}
     <section class="card">
       <div class="card-h"><span class="bar"></span><h3>Findings</h3>
         <span class="sub">${f.filter(x=>x.sev==="error").length} blocking · ${f.filter(x=>x.sev==="warn").length} to review · ${f.filter(x=>x.sev==="info").length} notes</span></div>
@@ -2210,6 +2496,7 @@ function renderQuality(root){
           <span class="sev ${x.sev}">${x.sev==="error"?"Blocking":x.sev==="warn"?"Review":"Note"} · E${x.cben}</span>
           ${x.locId ? `<button class="loc" data-go="${x.locId}">${esc(x.loc)}</button>` : `<span class="loc" style="color:var(--slate-2)">${esc(x.loc)}</span>`}
           <div class="msg">${esc(x.msg)}${x.why?`<small>${esc(x.why)}</small>`:""}</div>
+          <div class="f-fix">${fixButtons(x)}</div>
         </div>`).join("")
       : `<div class="empty"><strong>Nothing flagged</strong>Every competency in this track carries measurable criteria, full KSAB coverage, and aligned activities.</div>`}
     </section>`;
@@ -2219,6 +2506,51 @@ function renderQuality(root){
     state.sel = { type: id.startsWith("D") && !id.includes(".") ? "dom" : "comp", id };
     state.view = "build"; renderTabs(); renderMain(); window.scrollTo({top:0});
   });
+
+  const mxAll = document.getElementById("mxAll");
+  if (mxAll) mxAll.onchange = e => {
+    repairAll = e.target.checked;
+    const y = window.scrollY;
+    renderQuality(root, true);
+    window.scrollTo({ top: y });
+  };
+
+  /* fixes applied here re-render the tab, then flash the row that changed */
+  wireMatrix(root, (cid, ksid) => {
+    const y = window.scrollY;
+    renderTabs(); renderQuality(root, true);
+    window.scrollTo({ top: y });
+    const row = document.querySelector(`[data-row="${cid}|${ksid}"]`);
+    if (row) row.classList.add("pulse");
+  });
+
+  /* "Find" scrolls to the matrix row a finding refers to */
+  root.querySelectorAll("[data-find]").forEach(b => b.onclick = () => {
+    const row = document.querySelector(`[data-row="${b.dataset.find}"]`);
+    if (!row) return;
+    row.classList.remove("pulse"); void row.offsetWidth; row.classList.add("pulse");
+    if (row.scrollIntoView) row.scrollIntoView({ block:"center", behavior:"smooth" });
+  });
+}
+
+/* per-finding actions: only offered where the fix is unambiguous */
+function fixButtons(x){
+  if (!x.fix) return x.locId ? "" : "";
+  const c = compById(x.fix.comp);
+  if (!c) return "";
+  const key = `${x.fix.comp}|${x.fix.ks}`;
+  if (x.fix.kind === "cover")
+    return `<button class="mini" data-mx="cover|${x.fix.comp}|${x.fix.ks}">Mark assessed</button>
+            <button class="mini go" data-find="${key}">Show</button>`;
+  if (x.fix.kind === "teach"){
+    const acts = c.activities || [];
+    return `${acts.length ? `<button class="mini" data-mx="act|${x.fix.comp}|${acts[0].id}|${x.fix.ks}">Align to ${esc(acts[0].id)}</button>` :
+             `<button class="mini" data-mx="addact|${x.fix.comp}">Add activity</button>`}
+            <button class="mini go" data-find="${key}">Show</button>`;
+  }
+  if (x.fix.kind === "stale")
+    return `<button class="mini" data-mx="stale|${x.fix.comp}|${x.fix.ks}">Remove reference</button>`;
+  return "";
 }
 
 /* ============================================================ EXPORT */
@@ -2286,7 +2618,10 @@ function renderExport(root){
   const md = toMarkdown();
   root.innerHTML = `
     <div class="ex-actions">
-      <button class="btn" id="dlMd">Download Markdown</button>
+      <button class="btn" id="pdfDocBtn">Download PDF</button>
+      <button class="btn ghost" id="printDocBtn">Open printable page</button>
+      <button class="btn ghost" id="dlHtml">Save as document (.html)</button>
+      <button class="btn ghost" id="dlMd">Download Markdown</button>
       <button class="btn ghost" id="dlJson">Download JSON</button>
       <button class="btn ghost" id="copyMd">Copy Markdown</button>
       <label class="btn ghost" style="display:inline-flex;align-items:center">Import JSON
@@ -2294,12 +2629,25 @@ function renderExport(root){
       <button class="btn danger" id="reset">Reset this discipline to seed</button>
       <span class="saved" style="align-self:center;margin-left:auto">Saved</span>
     </div>
-    <div class="notice">Markdown is the curriculum-committee artifact — paste it into a document, a proposal, or an accreditation narrative. JSON round-trips the full framework so you can hand it to a colleague, version it, or load it into another system.</div>
+    <div class="opts">
+      <span class="oh">Include in printed document</span>
+      <label><input type="checkbox" data-opt="ksab" ${docOpts.ksab ? "checked" : ""}> KSAB coverage tables</label>
+      <label><input type="checkbox" data-opt="assess" ${docOpts.assess ? "checked" : ""}> Assessment strategy</label>
+      <label><input type="checkbox" data-opt="acts" ${docOpts.acts ? "checked" : ""}> Learning activities</label>
+      <label><input type="checkbox" data-opt="quality" ${docOpts.quality ? "checked" : ""}> Quality check summary</label>
+    </div>
+    <div class="notice"><b>Download PDF</b> typesets the framework straight to a finished PDF — real pages, selectable text, page-broken by domain, tables intact. Use it first: this preview runs in a sandboxed frame, so browser print dialogs are often blocked. <b>Open printable page</b> puts the same layout in its own tab and calls your printer; <b>Save as document</b> writes it to a standalone .html file you can print from any machine. Markdown is the paste-ready committee artifact; JSON round-trips the full framework for versioning or hand-off.</div>
     <pre class="out" id="mdOut">${esc(md)}</pre>`;
 
-  const slug = D().program.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,50);
-  document.getElementById("dlMd").onclick = () => download(`${slug}-competency-framework.md`, md, "text/markdown");
-  document.getElementById("dlJson").onclick = () => download(`${slug}-competency-framework.json`, JSON.stringify(D(), null, 2), "application/json");
+  const sl = slug();
+  document.getElementById("pdfDocBtn").onclick = e => { flashBtn(e.currentTarget, "Building\u2026"); doPDF(); };
+  document.getElementById("printDocBtn").onclick = doPrint;
+  document.getElementById("dlHtml").onclick = e => { savePrintable(); flashBtn(e.currentTarget, "Saved to downloads"); };
+  document.getElementById("dlMd").onclick = () => download(`${sl}-competency-framework.md`, md, "text/markdown");
+  document.getElementById("dlJson").onclick = () => download(`${sl}-competency-framework.json`, JSON.stringify(D(), null, 2), "application/json");
+  root.querySelectorAll('.opts input[data-opt]').forEach(cb => {
+    cb.onchange = () => { docOpts[cb.dataset.opt] = cb.checked; };
+  });
   document.getElementById("copyMd").onclick = async e => {
     try{ await navigator.clipboard.writeText(md); e.target.textContent = "Copied"; setTimeout(()=>e.target.textContent="Copy Markdown", 1600); }
     catch(err){ const p = document.getElementById("mdOut"); const r = document.createRange(); r.selectNode(p);
@@ -2330,10 +2678,772 @@ function renderExport(root){
   };
 }
 
+
+/* ============================================================ SAVE + PRINT */
+
+/* Document styles — single source of truth, used for on-paper printing here
+   and for the standalone HTML document written by "Save as document". */
+const DOC_CSS = `
+.pd{font-family:'Public Sans',Georgia,serif;color:#111;background:#fff;font-size:10.5pt;line-height:1.45;max-width:7.4in;margin:0 auto}
+.pd h1,.pd h2,.pd h3,.pd h4{font-family:'Archivo',system-ui,sans-serif;margin:0;letter-spacing:-.01em;line-height:1.18}
+.pd-bar{height:4pt;width:44pt;background:#FFC72C;margin-bottom:10pt}
+.pd-head{border-bottom:1.5pt solid #111;padding-bottom:12pt;margin-bottom:14pt}
+.pd-head h1{font-size:21pt;font-weight:800}
+.pd-sub{margin:5pt 0 0;font-size:11pt;color:#333}
+.pd-std{margin:3pt 0 0;font-family:'IBM Plex Mono',monospace;font-size:8pt;letter-spacing:.1em;text-transform:uppercase;color:#555}
+.pd-facts{width:100%;border-collapse:collapse;margin-top:11pt;font-size:9pt}
+.pd-facts th{width:1.5in;text-align:left;vertical-align:top;padding:3pt 10pt 3pt 0;font-family:'IBM Plex Mono',monospace;
+  font-size:7.5pt;letter-spacing:.1em;text-transform:uppercase;color:#555;font-weight:500}
+.pd-facts td{padding:3pt 0;vertical-align:top}
+.pd-dom{margin-top:16pt}
+.pd-dom:not(:first-of-type){break-before:page;page-break-before:always}
+.pd-dom-h{background:#14161A;color:#fff;padding:7pt 10pt;border-radius:2pt}
+.pd-dom-h h2{font-size:13pt;font-weight:700}
+.pd-dom-h .pd-el{margin:3pt 0 0;font-family:'IBM Plex Mono',monospace;font-size:7.5pt;letter-spacing:.08em;color:#C9CED4}
+.pd-rat{font-style:italic;color:#333;margin:7pt 0 0;font-size:9.5pt}
+.pd-comp{margin-top:13pt;padding-top:10pt;border-top:.75pt solid #C9CFC6;break-inside:auto}
+.pd-comp-h{display:flex;gap:9pt;align-items:baseline;break-after:avoid;page-break-after:avoid}
+.pd-id{font-family:'IBM Plex Mono',monospace;font-size:9pt;font-weight:600;color:#1D5B8E}
+.pd-comp-h h3{font-size:12pt;font-weight:700}
+.pd-stmt{margin:6pt 0 0;padding:7pt 10pt;background:#F4F6F1;border-left:3pt solid #FFC72C;font-size:10pt}
+.pd-def{margin:6pt 0 0;color:#333;font-size:9.5pt}
+.pd-tags{margin:6pt 0 0;font-family:'IBM Plex Mono',monospace;font-size:8pt;letter-spacing:.05em;color:#444}
+.pd-tags b{color:#111}
+.pd h4{margin:11pt 0 5pt;font-size:8.5pt;letter-spacing:.13em;text-transform:uppercase;color:#444;
+  border-bottom:.75pt solid #DDE1D8;padding-bottom:3pt;break-after:avoid;page-break-after:avoid}
+.pd table.pd-t{width:100%;border-collapse:collapse;font-size:9pt}
+.pd table.pd-t thead{display:table-header-group}
+.pd table.pd-t th{text-align:left;padding:4pt 6pt;border-bottom:1pt solid #111;font-family:'IBM Plex Mono',monospace;
+  font-size:7.5pt;letter-spacing:.08em;text-transform:uppercase;color:#333;font-weight:500}
+.pd table.pd-t td{padding:4pt 6pt;border-bottom:.5pt solid #E0E4DB;vertical-align:top}
+.pd table.pd-t tr{break-inside:avoid;page-break-inside:avoid}
+.pd .c-mono{font-family:'IBM Plex Mono',monospace;font-size:8.5pt;white-space:nowrap}
+.pd .yes{color:#186B3F}
+.pd .no{color:#B32B23;font-weight:700}
+.pd ul.pd-l{margin:4pt 0 0;padding-left:15pt}
+.pd ul.pd-l li{margin-bottom:2.5pt}
+.pd-kv{margin:0;font-size:9.5pt}
+.pd-kv div{padding:2.5pt 0;border-bottom:.5pt solid #E8EBE4;display:flex;gap:8pt}
+.pd-kv span:first-child{font-family:'IBM Plex Mono',monospace;font-size:7.5pt;letter-spacing:.08em;text-transform:uppercase;
+  color:#555;min-width:1.15in;padding-top:1.5pt}
+.pd-q{break-before:page;page-break-before:always;margin-top:16pt}
+.pd-q .pd-tally{display:flex;gap:14pt;margin:8pt 0 10pt;font-size:9.5pt}
+.pd-q .pd-tally b{font-family:'Archivo',sans-serif;font-size:15pt}
+.pd-f{margin-top:5pt;padding:6pt 9pt;border-left:3pt solid #999;background:#F7F8F5;font-size:9pt;break-inside:avoid}
+.pd-f.error{border-left-color:#B32B23}
+.pd-f.warn{border-left-color:#9A6205}
+.pd-f.info{border-left-color:#5A636B}
+.pd-f .sev{font-family:'IBM Plex Mono',monospace;font-size:7.5pt;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+.pd-f.error .sev{color:#B32B23}.pd-f.warn .sev{color:#9A6205}.pd-f.info .sev{color:#5A636B}
+.pd-foot{margin-top:18pt;padding-top:8pt;border-top:.75pt solid #C9CFC6;font-family:'IBM Plex Mono',monospace;
+  font-size:7.5pt;letter-spacing:.08em;text-transform:uppercase;color:#666;display:flex;justify-content:space-between;gap:12pt}
+`;
+
+/* what goes into the printed / saved document */
+const docOpts = { ksab:true, assess:true, acts:true, quality:true };
+
+function docHTML(){
+  const d = D();
+  const t = d.tracks ? d.tracks.find(x => x.id === state.track) : null;
+  const today = new Date().toLocaleDateString(undefined, { year:"numeric", month:"long", day:"numeric" });
+  const H = [];
+
+  H.push(`<header class="pd-head">
+    <div class="pd-bar"></div>
+    <h1>${esc(d.program)}</h1>
+    <p class="pd-sub">${esc(d.credential)}${t ? ` · ${esc(t.label)} track` : ""}</p>
+    <p class="pd-std">${esc(d.site)} · C-BEN Quality Framework for Competency-Based Education Programs</p>
+    <table class="pd-facts">
+      <tr><th>External frameworks</th><td>${d.frames.map(esc).join("; ")}</td></tr>
+      <tr><th>Validating partners</th><td>${d.partners.map(esc).join("; ")}</td></tr>
+      <tr><th>Scope</th><td>${domains().length} domains · ${comps().length} competencies ·
+        ${comps().reduce((n,c)=>n+(c.ksabs||[]).length,0)} KSAB components ·
+        ${comps().reduce((n,c)=>n+(c.activities||[]).length,0)} learning activities</td></tr>
+      <tr><th>Generated</th><td>${esc(today)}</td></tr>
+    </table>
+  </header>`);
+
+  for (const dom of domains()){
+    const cs = compsIn(dom.id);
+    if (!cs.length) continue;
+    H.push(`<section class="pd-dom">
+      <div class="pd-dom-h">
+        <h2>${esc(dom.id)} — ${esc(dom.title)}</h2>
+        ${dom.cben?.length ? `<p class="pd-el">C-BEN elements ${dom.cben.join(", ")}</p>` : ""}
+      </div>
+      ${dom.rationale ? `<p class="pd-rat">${esc(dom.rationale)}</p>` : ""}`);
+
+    for (const c of cs){
+      const cov = new Set(c.assessment?.covers || []);
+      const tgt = new Set((c.activities || []).flatMap(a => a.targets || []));
+      H.push(`<article class="pd-comp">
+        <div class="pd-comp-h"><span class="pd-id">${esc(c.id)}</span><h3>${esc(c.verb)} ${esc(c.object)}</h3></div>
+        <p class="pd-stmt"><b>Competency statement.</b> ${esc(c.verb)} ${esc(c.object)}${c.context ? `, ${esc(c.context)}` : ""}${c.criteria ? `, ${esc(c.criteria)}` : ""}.</p>
+        ${c.definition ? `<p class="pd-def">${esc(c.definition)}</p>` : ""}
+        <p class="pd-tags"><b>Cognitive level:</b> ${esc(c.level)} &nbsp;·&nbsp; <b>External validation:</b> ${c.validated ? esc(c.validatedBy || "Validated") : "Not yet validated"}</p>`);
+
+      if (docOpts.ksab && (c.ksabs || []).length){
+        H.push(`<h4>KSAB components</h4>
+        <table class="pd-t"><thead><tr><th style="width:.55in">ID</th><th style="width:.85in">Type</th><th>Component</th>
+          <th style="width:.7in">Assessed</th><th style="width:.6in">Taught</th></tr></thead><tbody>
+        ${c.ksabs.map(k => `<tr>
+            <td class="c-mono">${esc(k.id)}</td>
+            <td>${esc(KTYPE[k.type].label)}</td>
+            <td>${esc(k.text)}</td>
+            <td class="${cov.has(k.id) ? "yes" : "no"}">${cov.has(k.id) ? "Yes" : "No"}</td>
+            <td class="${tgt.has(k.id) ? "yes" : "no"}">${tgt.has(k.id) ? "Yes" : "No"}</td>
+          </tr>`).join("")}
+        </tbody></table>`);
+      }
+
+      const a = c.assessment;
+      if (docOpts.assess && a){
+        H.push(`<h4>Assessment strategy</h4>
+        <div class="pd-kv">
+          <div><span>Evidence</span><span>${esc(a.evidence)}</span></div>
+          <div><span>Purpose</span><span>${esc(a.mode)}</span></div>
+          <div><span>Setting</span><span>${esc(a.authenticity)}</span></div>
+          <div><span>Mastery threshold</span><span>${a.threshold ? esc(a.threshold) : "<i>not set</i>"}</span></div>
+          <div><span>Covers</span><span class="c-mono">${(a.covers || []).join(", ") || "—"}</span></div>
+        </div>
+        ${(a.rubric || []).length ? `<ul class="pd-l">${a.rubric.map(r => `<li>${esc(r)}</li>`).join("")}</ul>` : `<p class="pd-def"><i>No rubric criteria defined.</i></p>`}`);
+      }
+
+      if (docOpts.acts){
+        H.push(`<h4>Learning activities</h4>`);
+        if ((c.activities || []).length){
+          H.push(`<table class="pd-t"><thead><tr><th style="width:.55in">ID</th><th>Activity</th>
+            <th style="width:1.1in">Modality</th><th style="width:.55in">Hours</th><th style="width:.9in">Develops</th></tr></thead><tbody>
+          ${c.activities.map(x => `<tr>
+              <td class="c-mono">${esc(x.id)}</td><td>${esc(x.title)}</td><td>${esc(x.modality)}</td>
+              <td class="c-mono">${esc(x.hours)}</td><td class="c-mono">${(x.targets || []).join(", ") || "—"}</td>
+            </tr>`).join("")}
+          </tbody></table>`);
+        } else H.push(`<p class="pd-def"><i>No learning activities defined.</i></p>`);
+      }
+      H.push(`</article>`);
+    }
+    H.push(`</section>`);
+  }
+
+  if (docOpts.quality){
+    const f = audit();
+    const n = sev => f.filter(x => x.sev === sev).length;
+    H.push(`<section class="pd-q">
+      <div class="pd-bar"></div>
+      <h2 style="font-size:15pt">Quality check summary</h2>
+      <div class="pd-tally">
+        <span><b>${n("error")}</b> blocking</span>
+        <span><b>${n("warn")}</b> to review</span>
+        <span><b>${n("info")}</b> notes</span>
+      </div>
+      ${f.length ? f.map(x => `<div class="pd-f ${x.sev}">
+          <span class="sev">${x.sev === "error" ? "Blocking" : x.sev === "warn" ? "Review" : "Note"} · C-BEN element ${x.cben}</span>
+          <div><b>${esc(x.loc)}</b> — ${esc(x.msg)}</div>
+        </div>`).join("") : `<p>No findings. Every competency clears the checks in this build.</p>`}
+    </section>`);
+  }
+
+  H.push(`<footer class="pd-foot">
+    <span>${esc(d.program)}${t ? ` · ${esc(t.label)}` : ""}</span>
+    <span>Competency Architect · WSU Tech</span>
+  </footer>`);
+  return H.join("");
+}
+
+function docStyleEl(){
+  let el = document.getElementById("docStyle");
+  if (!el){ el = document.createElement("style"); el.id = "docStyle"; document.head.appendChild(el); el.textContent = DOC_CSS; }
+  return el;
+}
+function buildPrintDoc(){
+  docStyleEl();
+  const el = document.getElementById("printDoc");
+  el.className = "printdoc pd";
+  el.innerHTML = docHTML();
+}
+function toast(msg, ms = 8000){
+  document.querySelectorAll(".toast").forEach(n => n.remove());
+  const el = document.createElement("div");
+  el.className = "toast";
+  el.innerHTML = `<span>${esc(msg)}</span><button>Dismiss</button>`;
+  el.querySelector("button").onclick = () => el.remove();
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), ms);
+}
+
+/* This artifact runs inside a sandboxed frame, where a print dialog is often
+   refused or would print the surrounding page instead. So printing opens the
+   document in its own tab, and falls back to a downloaded file. */
+function openPrintable(){
+  docStyleEl();
+  const html = printableFile();
+  let w = null;
+  try{ w = window.open("", "_blank", "noopener"); }catch(e){}
+  if (w && w.document){
+    try{
+      w.document.open(); w.document.write(html); w.document.close();
+      setTimeout(() => { try{ w.focus(); w.print(); }catch(e){} }, 700);
+      return true;
+    }catch(e){ try{ w.close(); }catch(e2){} }
+  }
+  try{
+    const u = URL.createObjectURL(new Blob([html], { type:"text/html" }));
+    const w2 = window.open(u, "_blank");
+    setTimeout(() => URL.revokeObjectURL(u), 60000);
+    if (w2) return true;
+  }catch(e){}
+  return false;
+}
+function doPrint(){
+  buildPrintDoc();
+  if (openPrintable()){
+    toast("The document opened in a new tab with the print dialog. If your browser blocked the pop-up, use PDF instead \u2014 it downloads a finished file.");
+    return;
+  }
+  savePrintable();
+  toast("This preview blocks pop-ups, so the printable document was downloaded instead. Open that file and print from there \u2014 or use PDF for a finished file.");
+}
+function doPDF(){
+  try{
+    const name = savePDF();
+    toast("Saved " + name + " to your downloads.", 5000);
+    return true;
+  }catch(e){
+    console.error(e);
+    savePrintable();
+    toast("The PDF writer hit an error, so the printable HTML document was downloaded instead.");
+    return false;
+  }
+}
+
+/* explicit save to browser storage */
+async function saveNow(){
+  clearTimeout(saveTimer);
+  paintSaved("Saving…");
+  try{
+    await window.storage.set(KEY(state.disc), JSON.stringify(state.data));
+    state.dirty = false;
+    paintSaved("Saved " + new Date().toLocaleTimeString([], { hour:"numeric", minute:"2-digit" }));
+    return true;
+  }catch(e){ paintSaved("Session only"); return false; }
+}
+function flashBtn(btn, text){
+  if (!btn) return;
+  const html = btn.innerHTML;
+  btn.innerHTML = text;
+  setTimeout(() => { btn.innerHTML = html; }, 1500);
+}
+
+/* standalone, self-contained HTML document — save it, email it, print it later */
+function printableFile(){
+  const d = D(), t = d.tracks ? d.tracks.find(x => x.id === state.track) : null;
+  const title = `${d.program}${t ? " — " + t.label : ""} · Competency Framework`;
+  return `<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${esc(title)}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+${DOC_CSS}
+html,body{background:#EDF0EA;margin:0;padding:28px 18px 60px}
+.sheet{background:#fff;max-width:8.5in;margin:0 auto;padding:0.7in 0.75in;box-shadow:0 1px 3px rgba(0,0,0,.16)}
+.tb{max-width:8.5in;margin:0 auto 14px;display:flex;gap:9px;align-items:center;font-family:'Public Sans',sans-serif}
+.tb button{font-family:'Archivo',sans-serif;font-size:13px;font-weight:600;padding:9px 15px;border-radius:2px;
+  border:1px solid #14161A;background:#14161A;color:#fff;cursor:pointer}
+.tb button:hover{background:#FFC72C;color:#14161A;border-color:#FFC72C}
+.tb span{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:#5A636B}
+@page{margin:0.6in 0.7in}
+@media print{html,body{background:#fff;padding:0;margin:0}.tb{display:none}.sheet{box-shadow:none;max-width:none;padding:0;margin:0}}
+</style></head>
+<body>
+<div class="tb"><button onclick="window.print()">Print / Save as PDF</button><span>Self-contained document · no app required</span></div>
+<div class="sheet pd">${docHTML()}</div>
+</body></html>`;
+}
+function slug(){
+  return D().program.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 50);
+}
+function savePrintable(){
+  docStyleEl();
+  download(`${slug()}-competency-framework.html`, printableFile(), "text/html");
+}
+
+/* header buttons + keyboard shortcuts (wired once) */
+function wireTools(){
+  const sb = document.getElementById("saveNow");
+  const pb = document.getElementById("printBtn");
+  const fb = document.getElementById("pdfBtn");
+  if (/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent))
+    [sb, fb].forEach(b => b.querySelector("kbd").textContent = b.querySelector("kbd").textContent.replace("Ctrl", "\u2318"));
+  sb.onclick = async () => { const ok = await saveNow(); flashBtn(sb, ok ? "Saved" : "Session only"); };
+  fb.onclick = () => { flashBtn(fb, "Building\u2026"); doPDF(); };
+  pb.onclick = doPrint;
+
+  window.addEventListener("keydown", e => {
+    const mod = e.ctrlKey || e.metaKey;
+    if (!mod) return;
+    const k = e.key.toLowerCase();
+    if (k === "s"){ e.preventDefault(); saveNow().then(ok => flashBtn(sb, ok ? "Saved" : "Session only")); }
+    if (k === "p"){ e.preventDefault(); doPDF(); }
+  });
+  window.addEventListener("beforeprint", buildPrintDoc);
+}
+
+/* ============================================================ PDF WRITER
+   A dependency-free PDF generator. The artifact runs in a sandboxed frame
+   where window.print() is unreliable, so the document is typeset here and
+   written straight to a real PDF file with selectable text. */
+
+/* --- Adobe core-font metrics (units/1000) for ASCII 32-126 --- */
+const AFM_H = [278,278,355,556,556,889,667,191,333,333,389,584,278,333,278,278,556,556,556,556,556,556,556,556,556,556,278,278,584,584,584,556,1015,667,667,722,722,667,611,778,722,278,500,667,556,833,722,778,667,778,722,667,611,722,667,944,667,667,611,278,278,278,469,556,333,556,556,500,556,556,278,556,556,222,222,500,222,833,556,556,556,556,333,500,278,556,500,722,500,500,500,334,260,334,584];
+const AFM_B = [278,333,474,556,556,889,722,238,333,333,389,584,278,333,278,278,556,556,556,556,556,556,556,556,556,556,333,333,584,584,584,611,975,722,722,722,722,667,611,778,722,278,556,722,611,833,722,778,667,778,722,667,611,722,667,944,667,667,611,333,278,333,584,556,333,556,611,556,611,556,333,611,611,278,278,556,278,889,611,611,611,611,389,556,333,611,556,778,556,556,500,389,280,389,584];
+
+/* WinAnsi byte for the few non-ASCII marks the document actually uses */
+const WINANSI = { "\u2014":151, "\u2013":150, "\u2018":145, "\u2019":146, "\u201C":147, "\u201D":148,
+  "\u00B7":183, "\u2026":133, "\u2022":149, "\u00D7":215, "\u00A0":32, "\u2192":45, "\u00E9":233, "\u00B0":176 };
+
+function pdfByte(ch){
+  const c = ch.charCodeAt(0);
+  if (c >= 32 && c <= 126) return c;
+  if (WINANSI[ch] != null) return WINANSI[ch];
+  if (c >= 160 && c <= 255) return c;
+  return 63; /* ? */
+}
+function pdfClean(s){ return String(s == null ? "" : s).replace(/\s+/g, " ").trim(); }
+function charW(ch, f){
+  if (f === "m") return 600;                       /* Courier is fixed-pitch */
+  const c = ch.charCodeAt(0);
+  const t = f === "b" ? AFM_B : AFM_H;
+  if (c >= 32 && c <= 126) return t[c - 32];
+  return f === "b" ? 556 : 500;
+}
+function strW(s, size, f){
+  let w = 0;
+  for (const ch of String(s)) w += charW(ch, f);
+  return w * size / 1000;
+}
+function fontKey(o){ return o && o.mono ? "m" : o && o.bold ? "b" : ""; }
+function wrapText(s, size, f, maxw){
+  const out = [];
+  for (const para of String(s).split("\n")){
+    const words = para.split(/\s+/).filter(Boolean);
+    if (!words.length){ out.push(""); continue; }
+    let line = "";
+    for (let word of words){
+      while (strW(word, size, f) > maxw){              /* break a monster token */
+        let cut = 1;
+        while (cut < word.length && strW(word.slice(0, cut + 1), size, f) <= maxw) cut++;
+        out.push(line ? line + " " + word.slice(0, cut) : word.slice(0, cut));
+        line = ""; word = word.slice(cut);
+      }
+      const test = line ? line + " " + word : word;
+      if (strW(test, size, f) <= maxw) line = test;
+      else { if (line) out.push(line); line = word; }
+    }
+    if (line) out.push(line);
+  }
+  return out.length ? out : [""];
+}
+function pdfEsc(s){
+  let o = "";
+  for (const ch of String(s)){
+    const b = pdfByte(ch);
+    if (b === 40 || b === 41 || b === 92) o += "\\" + String.fromCharCode(b);
+    else o += String.fromCharCode(b);
+  }
+  return o;
+}
+function hexRGB(h){
+  const n = parseInt(h.replace("#", ""), 16);
+  return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255];
+}
+
+/* ---------------- page canvas ---------------- */
+const PG = { w: 612, h: 792, ml: 54, mr: 54, mt: 54, mb: 58 };
+const FONT = { reg: "/F1", bold: "/F2", ital: "/F3", mono: "/F4" };
+
+function Canvas(){
+  const pages = [[]];
+  let p = 0, y = PG.h - PG.mt;
+  const CW = PG.w - PG.ml - PG.mr;
+  const ops = () => pages[p];
+  const api = {
+    pages, CW,
+    get y(){ return y; }, set y(v){ y = v; },
+    x: PG.ml,
+    newPage(){ pages.push([]); p = pages.length - 1; y = PG.h - PG.mt; },
+    ensure(h){ if (y - h < PG.mb) api.newPage(); },
+    fill(hex){ const c = hexRGB(hex); ops().push(`${c[0].toFixed(3)} ${c[1].toFixed(3)} ${c[2].toFixed(3)} rg`); },
+    rect(x, yy, w, h, hex){ api.fill(hex); ops().push(`${x.toFixed(2)} ${yy.toFixed(2)} ${w.toFixed(2)} ${h.toFixed(2)} re f`); },
+    /* draws one line of text with the baseline at yy */
+    line(str, x, yy, size, opt = {}){
+      const f = opt.mono ? FONT.mono : opt.bold ? FONT.bold : opt.ital ? FONT.ital : FONT.reg;
+      api.fill(opt.color || "#111111");
+      ops().push(`BT ${f} ${size} Tf ${x.toFixed(2)} ${yy.toFixed(2)} Td (${pdfEsc(str)}) Tj ET`);
+    },
+    /* flows wrapped text from the cursor; returns height consumed */
+    text(str, opt = {}){
+      const size = opt.size || 10;
+      const lead = opt.lead || size * 1.35;
+      const maxw = opt.width || (api.CW - (opt.indent || 0));
+      const fk = fontKey(opt);
+      const lines = wrapText(pdfClean(str), size, fk, maxw);
+      for (const ln of lines){
+        api.ensure(lead);
+        y -= lead;
+        let x = PG.ml + (opt.indent || 0);
+        if (opt.align === "right") x = PG.ml + api.CW - strW(ln, size, fk);
+        api.line(ln, x, y + lead * 0.24, size, opt);
+      }
+      if (opt.after) y -= opt.after;
+      return lines.length * lead;
+    },
+    gap(h){ y -= h; },
+    rule(hex = "#C9CFC6", h = 0.6, pad = 0){ api.ensure(h + pad); y -= pad; api.rect(PG.ml, y, api.CW, h, hex); y -= h; },
+    measure(str, size, f, maxw, lead){ return wrapText(pdfClean(str), size, f, maxw).length * lead; }
+  };
+  return api;
+}
+
+/* ---------------- table ---------------- */
+function pdfTable(cv, cols, rows){
+  const size = 8.5, lead = 11, padx = 5, pady = 4;
+  const total = cols.reduce((n, c) => n + c.w, 0);
+  const W = cols.map(c => c.w / total * cv.CW);
+
+  const header = () => {
+    cv.ensure(lead + pady * 2 + 2);
+    cv.y -= pady;
+    let x = PG.ml;
+    cols.forEach((c, i) => {
+      let h = String(c.h).toUpperCase();
+      const room = W[i] - (i ? padx : 0) - padx;
+      while (h.length > 2 && strW(h, 7.2, "m") > room) h = h.slice(0, -1);
+      cv.line(h, x + (i ? padx : 0), cv.y - lead + 3, 7.2, { mono: true, color: "#3A4048" });
+      x += W[i];
+    });
+    cv.y -= lead;
+    cv.y -= 2;
+    cv.rect(PG.ml, cv.y, cv.CW, 0.9, "#111111");
+    cv.y -= 1;
+  };
+
+  header();
+  for (const row of rows){
+    const cells = row.map((cell, i) => {
+      const v = typeof cell === "object" && cell !== null ? cell : { text: cell };
+      const w = W[i] - (i ? padx : 0) - padx;
+      return { ...v, lines: wrapText(pdfClean(v.text), size, fontKey(v), w), w };
+    });
+    const h = Math.max(...cells.map(c => c.lines.length)) * lead + pady * 2;
+    if (cv.y - h < PG.mb){ cv.newPage(); header(); }
+    cv.y -= pady;
+    let x = PG.ml;
+    cells.forEach((c, i) => {
+      let ly = cv.y;
+      for (const ln of c.lines){
+        ly -= lead;
+        cv.line(ln, x + (i ? padx : 0), ly + 3, size, { bold: c.bold, mono: c.mono, color: c.color || "#141820" });
+      }
+      x += W[i];
+    });
+    cv.y -= h - pady;
+    cv.rect(PG.ml, cv.y, cv.CW, 0.4, "#E2E6DE");
+    cv.y -= 0.4;
+  }
+  cv.gap(4);
+}
+
+/* ---------------- document layout ---------------- */
+function pdfDocument(){
+  const cv = Canvas();
+  const d = D();
+  const t = d.tracks ? d.tracks.find(x => x.id === state.track) : null;
+  const today = new Date().toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
+
+  /* masthead */
+  cv.y -= 4;
+  cv.rect(PG.ml, cv.y - 4, 44, 4, "#FFC72C");
+  cv.y -= 14;
+  cv.text(d.program, { size: 20, bold: true, lead: 24 });
+  cv.text(d.credential + (t ? " \u00B7 " + t.label + " track" : ""), { size: 11, color: "#333333", lead: 15 });
+  cv.text(d.site, { size: 7.6, mono: true, color: "#5A636B", lead: 10.5 });
+  cv.text("C-BEN Quality Framework for Competency-Based Education Programs",
+    { size: 7.6, mono: true, color: "#5A636B", lead: 10.5 });
+  cv.gap(8);
+
+  const facts = [
+    ["External frameworks", d.frames.join("; ")],
+    ["Validating partners", d.partners.join("; ")],
+    ["Scope", `${domains().length} domains \u00B7 ${comps().length} competencies \u00B7 ` +
+      `${comps().reduce((n, c) => n + (c.ksabs || []).length, 0)} KSAB components \u00B7 ` +
+      `${comps().reduce((n, c) => n + (c.activities || []).length, 0)} learning activities`],
+    ["Generated", today]
+  ];
+  const LW = 118;
+  for (const [k, v] of facts){
+    const lines = wrapText(pdfClean(v), 9, "", cv.CW - LW);
+    cv.ensure(lines.length * 12 + 3);
+    const top = cv.y;
+    cv.line(k.toUpperCase(), PG.ml, top - 9, 7.2, { mono: true, color: "#5A636B" });
+    let ly = top;
+    for (const ln of lines){ ly -= 12; cv.line(ln, PG.ml + LW, ly + 3, 9); }
+    cv.y = ly - 3;
+  }
+  cv.gap(6);
+  cv.rect(PG.ml, cv.y, cv.CW, 1.2, "#111111");
+  cv.y -= 1.2;
+
+  let firstDomain = true;
+  for (const dom of domains()){
+    const cs = compsIn(dom.id);
+    if (!cs.length) continue;
+    if (!firstDomain) cv.newPage(); else cv.gap(14);
+    firstDomain = false;
+
+    /* domain band */
+    const hasEl = dom.cben && dom.cben.length;
+    const titleLines = wrapText(`${dom.id} \u2014 ${dom.title}`, 13, "b", cv.CW - 20);
+    const bandH = titleLines.length * 16 + (hasEl ? 11 : 0) + 14;
+    cv.ensure(bandH + 26);
+    cv.y -= bandH;
+    cv.rect(PG.ml, cv.y, cv.CW, bandH, "#14161A");
+    let by = cv.y + bandH - 7;
+    for (const ln of titleLines){ by -= 13; cv.line(ln, PG.ml + 10, by, 13, { bold: true, color: "#FFFFFF" }); by -= 3; }
+    if (hasEl) cv.line("C-BEN ELEMENTS " + dom.cben.join(", "), PG.ml + 10, cv.y + 6, 7.2, { mono: true, color: "#C9CED4" });
+    cv.gap(9);
+    if (dom.rationale) cv.text(dom.rationale, { size: 9.5, ital: true, color: "#333333", lead: 12.5, after: 3 });
+
+    for (const c of cs){
+      const cov = new Set(c.assessment?.covers || []);
+      const tgt = new Set((c.activities || []).flatMap(a => a.targets || []));
+
+      cv.gap(8);
+      cv.rule("#C9CFC6", 0.6, 0);
+      cv.gap(7);
+      cv.ensure(46);
+      const idw = strW(c.id, 9.5, "m") + 10;
+      const ty = cv.y;
+      cv.line(c.id, PG.ml, ty - 12, 9.5, { mono: true, color: "#1D5B8E" });
+      cv.text(`${c.verb} ${c.object}`, { size: 12.5, bold: true, lead: 15.5, indent: idw, width: cv.CW - idw });
+      cv.gap(5);
+
+      /* statement panel */
+      const stmt = `${c.verb} ${c.object}${c.context ? ", " + c.context : ""}${c.criteria ? ", " + c.criteria : ""}.`;
+      const full = "Competency statement.  " + stmt;
+      const sw = cv.CW - 22;
+      const slines = wrapText(pdfClean(full), 9.8, "", sw);
+      const sh = slines.length * 13 + 14;
+      cv.ensure(sh + 4);
+      cv.y -= sh;
+      cv.rect(PG.ml, cv.y, cv.CW, sh, "#F4F6F1");
+      cv.rect(PG.ml, cv.y, 3, sh, "#FFC72C");
+      let sy = cv.y + sh - 7;
+      slines.forEach((ln, i) => {
+        sy -= 13;
+        if (i === 0){
+          const lead = "Competency statement.";
+          cv.line(lead, PG.ml + 12, sy + 3.5, 9.8, { bold: true });
+          cv.line(ln.slice(lead.length).replace(/^\s+/, ""), PG.ml + 12 + strW(lead + " ", 9.8, "b"), sy + 3.5, 9.8);
+        } else cv.line(ln, PG.ml + 12, sy + 3.5, 9.8);
+      });
+      cv.gap(7);
+
+      if (c.definition) cv.text(c.definition, { size: 9.5, color: "#333333", lead: 12.5, after: 4 });
+      cv.text(`Cognitive level: ${c.level}   \u00B7   External validation: ${c.validated ? (c.validatedBy || "Validated") : "Not yet validated"}`,
+        { size: 8.2, mono: true, color: "#3A4048", lead: 11.5, after: 2 });
+
+      const h4 = label => {
+        cv.ensure(34);
+        cv.gap(9);
+        cv.text(label.toUpperCase(), { size: 7.6, mono: true, color: "#444C55", lead: 10 });
+        cv.gap(2);
+        cv.rect(PG.ml, cv.y, cv.CW, 0.5, "#DDE1D8");
+        cv.y -= 0.5;
+        cv.gap(3);
+      };
+
+      if (docOpts.ksab && (c.ksabs || []).length){
+        h4("KSAB components");
+        pdfTable(cv,
+          [{ h: "ID", w: 8 }, { h: "Type", w: 13 }, { h: "Component", w: 55 }, { h: "Assessed", w: 12 }, { h: "Taught", w: 12 }],
+          c.ksabs.map(k => [
+            { text: k.id, mono: true },
+            KTYPE[k.type].label,
+            k.text,
+            { text: cov.has(k.id) ? "Yes" : "No", color: cov.has(k.id) ? "#186B3F" : "#B32B23", bold: !cov.has(k.id) },
+            { text: tgt.has(k.id) ? "Yes" : "No", color: tgt.has(k.id) ? "#186B3F" : "#B32B23", bold: !tgt.has(k.id) }
+          ]));
+      }
+
+      const a = c.assessment;
+      if (docOpts.assess && a){
+        h4("Assessment strategy");
+        const kv = [
+          ["Evidence", a.evidence], ["Purpose", a.mode], ["Setting", a.authenticity],
+          ["Mastery threshold", a.threshold || "not set"], ["Covers", (a.covers || []).join(", ") || "\u2014"]
+        ];
+        for (const [k, v] of kv){
+          const mono = k === "Covers";
+          const lines = wrapText(pdfClean(v), 9.3, mono ? "m" : "", cv.CW - 108);
+          cv.ensure(lines.length * 12 + 2);
+          const top = cv.y;
+          cv.line(k.toUpperCase(), PG.ml, top - 9, 7.2, { mono: true, color: "#5A636B" });
+          let ly = top;
+          for (const ln of lines){ ly -= 12; cv.line(ln, PG.ml + 108, ly + 3, 9.3, { mono }); }
+          cv.y = ly;
+          cv.rect(PG.ml, cv.y, cv.CW, 0.4, "#E8EBE4");
+          cv.y -= 2.4;
+        }
+        cv.gap(4);
+        if ((a.rubric || []).length){
+          for (const r of a.rubric){
+            cv.ensure(14);
+            const top = cv.y;
+            cv.line("\u2022", PG.ml + 4, top - 9.5, 9.3, { color: "#8A9199" });
+            cv.text(r, { size: 9.3, lead: 12.3, indent: 16, width: cv.CW - 16 });
+            cv.gap(1);
+          }
+        } else cv.text("No rubric criteria defined.", { size: 9.3, ital: true, color: "#5A636B", lead: 12 });
+      }
+
+      if (docOpts.acts){
+        h4("Learning activities");
+        if ((c.activities || []).length){
+          pdfTable(cv,
+            [{ h: "ID", w: 8 }, { h: "Activity", w: 50 }, { h: "Modality", w: 18 }, { h: "Hours", w: 9 }, { h: "Develops", w: 15 }],
+            c.activities.map(x => [
+              { text: x.id, mono: true }, x.title, x.modality,
+              { text: String(x.hours), mono: true }, { text: (x.targets || []).join(", ") || "\u2014", mono: true }
+            ]));
+        } else cv.text("No learning activities defined.", { size: 9.3, ital: true, color: "#5A636B", lead: 12 });
+      }
+    }
+  }
+
+  if (docOpts.quality){
+    cv.newPage();
+    const f = audit();
+    const n = sev => f.filter(x => x.sev === sev).length;
+    cv.y -= 4;
+    cv.rect(PG.ml, cv.y - 4, 44, 4, "#FFC72C");
+    cv.y -= 14;
+    cv.text("Quality check summary", { size: 16, bold: true, lead: 20 });
+    cv.gap(6);
+    const tally = [[n("error"), "blocking", "#B32B23"], [n("warn"), "to review", "#9A6205"], [n("info"), "notes", "#5A636B"]];
+    cv.ensure(28);
+    cv.y -= 20;
+    let tx = PG.ml;
+    for (const [num, lbl, col] of tally){
+      cv.line(String(num), tx, cv.y, 15, { bold: true, color: col });
+      const nw = strW(String(num), 15, "b") + 5;
+      cv.line(lbl, tx + nw, cv.y, 9.5, { color: "#333333" });
+      tx += nw + strW(lbl, 9.5, "") + 22;
+    }
+    cv.gap(12);
+    if (!f.length) cv.text("No findings. Every competency in this build clears the checks.", { size: 10, lead: 14 });
+    for (const x of f){
+      const col = x.sev === "error" ? "#B32B23" : x.sev === "warn" ? "#9A6205" : "#5A636B";
+      const head = `${x.sev === "error" ? "BLOCKING" : x.sev === "warn" ? "REVIEW" : "NOTE"} \u00B7 C-BEN ELEMENT ${x.cben}`;
+      const bodyLines = wrapText(pdfClean(`${x.loc} \u2014 ${x.msg}`), 9.3, "", cv.CW - 22);
+      const h = 12 + bodyLines.length * 12 + 12;
+      cv.ensure(h + 6);
+      cv.y -= h;
+      cv.rect(PG.ml, cv.y, cv.CW, h, "#F7F8F5");
+      cv.rect(PG.ml, cv.y, 3, h, col);
+      let ly = cv.y + h - 6;
+      ly -= 9; cv.line(head, PG.ml + 12, ly, 7.2, { mono: true, color: col });
+      for (const ln of bodyLines){ ly -= 12; cv.line(ln, PG.ml + 12, ly, 9.3, { color: "#1B1F24" }); }
+      cv.gap(6);
+    }
+  }
+
+  /* footers, once the page count is known */
+  const label = `${d.program}${t ? " \u00B7 " + t.label : ""}`;
+  cv.pages.forEach((ops, i) => {
+    const c = hexRGB("#8A9199");
+    ops.push(`0.83 0.85 0.82 rg ${PG.ml} ${PG.mb - 16} ${PG.w - PG.ml - PG.mr} 0.5 re f`);
+    ops.push(`${c[0].toFixed(3)} ${c[1].toFixed(3)} ${c[2].toFixed(3)} rg`);
+    ops.push(`BT ${FONT.mono} 7 Tf ${PG.ml} ${PG.mb - 27} Td (${pdfEsc(label.toUpperCase())}) Tj ET`);
+    const right = `COMPETENCY ARCHITECT \u00B7 WSU TECH \u00B7 PAGE ${i + 1} OF ${cv.pages.length}`;
+    const rw = strW(right, 7, "m");
+    ops.push(`BT ${FONT.mono} 7 Tf ${(PG.w - PG.mr - rw).toFixed(2)} ${PG.mb - 27} Td (${pdfEsc(right)}) Tj ET`);
+  });
+
+  return cv.pages;
+}
+
+/* ---------------- assemble the PDF file ---------------- */
+function buildPDFBytes(){
+  const pages = pdfDocument();
+  const d = D();
+  const objs = [];
+  const add = body => { objs.push(body); return objs.length; };  /* 1-based object number */
+
+  const fontObjs = [
+    add("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>"),
+    add("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>"),
+    add("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Oblique /Encoding /WinAnsiEncoding >>"),
+    add("<< /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>")
+  ];
+  const res = `<< /Font << /F1 ${fontObjs[0]} 0 R /F2 ${fontObjs[1]} 0 R /F3 ${fontObjs[2]} 0 R /F4 ${fontObjs[3]} 0 R >> >>`;
+
+  const pagesObj = add("");                       /* placeholder, filled below */
+  const kids = [];
+  for (const ops of pages){
+    const stream = ops.join("\n");
+    const sObj = add(`<< /Length ${stream.length} >>\nstream\n${stream}\nendstream`);
+    const pObj = add(`<< /Type /Page /Parent ${pagesObj} 0 R /MediaBox [0 0 ${PG.w} ${PG.h}] /Resources ${res} /Contents ${sObj} 0 R >>`);
+    kids.push(pObj);
+  }
+  objs[pagesObj - 1] = `<< /Type /Pages /Count ${kids.length} /Kids [${kids.map(k => k + " 0 R").join(" ")}] >>`;
+
+  const title = pdfEsc(`${d.program} - Competency Framework`.replace(/[^\x20-\x7E]/g, "-"));
+  const stamp = new Date();
+  const z = n => String(n).padStart(2, "0");
+  const dstr = `D:${stamp.getFullYear()}${z(stamp.getMonth() + 1)}${z(stamp.getDate())}${z(stamp.getHours())}${z(stamp.getMinutes())}${z(stamp.getSeconds())}`;
+  const info = add(`<< /Title (${title}) /Author (WSU Tech) /Creator (Competency Architect) /Producer (Competency Architect) /CreationDate (${dstr}) >>`);
+  const cat = add(`<< /Type /Catalog /Pages ${pagesObj} 0 R >>`);
+
+  let out = "%PDF-1.4\n%\u00E2\u00E3\u00CF\u00D3\n";
+  const offsets = [];
+  objs.forEach((body, i) => {
+    offsets.push(out.length);
+    out += `${i + 1} 0 obj\n${body}\nendobj\n`;
+  });
+  const xref = out.length;
+  out += `xref\n0 ${objs.length + 1}\n0000000000 65535 f \n`;
+  for (const off of offsets) out += String(off).padStart(10, "0") + " 00000 n \n";
+  out += `trailer\n<< /Size ${objs.length + 1} /Root ${cat} 0 R /Info ${info} 0 R >>\nstartxref\n${xref}\n%%EOF\n`;
+
+  const bytes = new Uint8Array(out.length);
+  for (let i = 0; i < out.length; i++) bytes[i] = out.charCodeAt(i) & 0xFF;
+  return bytes;
+}
+
+function downloadBytes(name, bytes, type){
+  const u = URL.createObjectURL(new Blob([bytes], { type }));
+  const a = document.createElement("a");
+  a.href = u; a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(u), 4000);
+}
+function savePDF(){
+  const t = D().tracks ? D().tracks.find(x => x.id === state.track) : null;
+  const name = `${slug()}${t ? "-" + t.id : ""}-competency-framework.pdf`;
+  downloadBytes(name, buildPDFBytes(), "application/pdf");
+  return name;
+}
+
 /* ============================================================ BOOT */
 (async function(){
   state.data = await load(state.disc);
   state.sel = { type:"comp", id: comps()[0]?.id };
+  docStyleEl();
+  wireTools();
   renderAll();
 })();
 </script>
